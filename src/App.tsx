@@ -8,6 +8,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
 
 import { LoginPage } from '@/pages/auth/LoginPage';
+import { LandingPage } from '@/pages/landing/LandingPage';
 import { DashboardPage } from '@/pages/dashboard/DashboardPage';
 import { ManagersPage } from '@/pages/managers/ManagersPage';
 import { EmployeesPage } from '@/pages/employees/EmployeesPage';
@@ -16,40 +17,17 @@ import { CustomerRegisterPage } from '@/pages/customers/CustomerRegisterPage';
 import { CustomerPortalPage } from '@/pages/customer-portal/CustomerPortalPage';
 import { NotFoundPage } from '@/pages/not-found/NotFoundPage';
 
-// Root redirect handler based on authentication & role
-const RootRedirect: React.FC = () => {
-  const { isAuthenticated, role, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (role === 'CUSTOMER') {
-    return <Navigate to="/customer/home" replace />;
-  }
-
-  return <Navigate to="/dashboard" replace />;
-};
-
 export function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="metrogram-theme">
       <AuthProvider>
         <BrowserRouter>
           <Routes>
+            {/* Public Landing Page */}
+            <Route path="/" element={<LandingPage />} />
+
             {/* Public Login Route */}
             <Route path="/login" element={<LoginPage />} />
-
-            {/* Root Dispatcher */}
-            <Route path="/" element={<RootRedirect />} />
 
             {/* Authenticated Application Routes wrapped in AppLayout */}
             <Route element={<AppLayout />}>
