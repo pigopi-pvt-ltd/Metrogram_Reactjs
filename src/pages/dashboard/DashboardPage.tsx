@@ -36,6 +36,7 @@ import { ManagerModal, type ManagerFormValues } from '@/components/managers/Mana
 import { EmployeeModal, type EmployeeFormValues } from '@/components/employees/EmployeeModal';
 import { CustomerModal, type CustomerFormValues } from '@/components/customers/CustomerModal';
 import { toast } from 'sonner';
+import { CopyButton } from '@/components/shared/CopyButton';
 
 export const DashboardPage: React.FC = () => {
   const { user, role } = useAuth();
@@ -146,13 +147,24 @@ export const DashboardPage: React.FC = () => {
   const userActivityColumns: ColumnDef<User>[] = [
     {
       key: 'name',
-      header: 'User',
+      header: 'Name',
+      render: (u) => {
+        const name = u.fullName || `${u.firstName} ${u.lastName}`;
+        return (
+          <div className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span>{name}</span>
+            <CopyButton text={name} label="Name" className="opacity-70 hover:opacity-100" />
+          </div>
+        );
+      },
+    },
+    {
+      key: 'email',
+      header: 'Email',
       render: (u) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">
-            {u.fullName || `${u.firstName} ${u.lastName}`}
-          </span>
-          <span className="text-xs text-muted-foreground">{u.email}</span>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>{u.email}</span>
+          <CopyButton text={u.email} label="Email" className="opacity-70 hover:opacity-100" />
         </div>
       ),
     },
@@ -185,24 +197,41 @@ export const DashboardPage: React.FC = () => {
   const recentCustomerColumns: ColumnDef<User>[] = [
     {
       key: 'name',
-      header: 'Customer',
+      header: 'Customer Name',
+      render: (c) => {
+        const name = c.fullName || `${c.firstName} ${c.lastName}`;
+        return (
+          <div className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span>{name}</span>
+            <CopyButton text={name} label="Customer Name" className="opacity-70 hover:opacity-100" />
+          </div>
+        );
+      },
+    },
+    {
+      key: 'email',
+      header: 'Email',
       render: (c) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">
-            {c.fullName || `${c.firstName} ${c.lastName}`}
-          </span>
-          <span className="text-xs text-muted-foreground">{c.email}</span>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>{c.email}</span>
+          <CopyButton text={c.email} label="Email" className="opacity-70 hover:opacity-100" />
         </div>
       ),
     },
     {
       key: 'customerCode',
-      header: 'Code',
-      render: (c) => (
-        <code className="text-xs font-mono font-medium">
-          {(c.profile as CustomerProfile)?.customerCode || 'N/A'}
-        </code>
-      ),
+      header: 'Customer Code',
+      render: (c) => {
+        const code = (c.profile as CustomerProfile)?.customerCode;
+        return (
+          <div className="flex items-center gap-1.5">
+            <code className="text-xs font-mono font-medium bg-muted/60 px-1.5 py-0.5 rounded">
+              {code || 'N/A'}
+            </code>
+            {code && <CopyButton text={code} label="Customer Code" className="opacity-70 hover:opacity-100" />}
+          </div>
+        );
+      },
     },
     {
       key: 'tier',

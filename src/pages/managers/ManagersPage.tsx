@@ -25,6 +25,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { CopyButton } from '@/components/shared/CopyButton';
 
 export const ManagersPage: React.FC = () => {
   const [managers, setManagers] = useState<User[]>([]);
@@ -126,12 +127,23 @@ export const ManagersPage: React.FC = () => {
     {
       key: 'name',
       header: 'Manager Name',
+      render: (m) => {
+        const name = m.fullName || `${m.firstName} ${m.lastName}`;
+        return (
+          <div className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span>{name}</span>
+            <CopyButton text={name} label="Manager Name" className="opacity-70 hover:opacity-100" />
+          </div>
+        );
+      },
+    },
+    {
+      key: 'email',
+      header: 'Email Address',
       render: (m) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">
-            {m.fullName || `${m.firstName} ${m.lastName}`}
-          </span>
-          <span className="text-xs text-muted-foreground">{m.email}</span>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>{m.email}</span>
+          <CopyButton text={m.email} label="Email" className="opacity-70 hover:opacity-100" />
         </div>
       ),
     },

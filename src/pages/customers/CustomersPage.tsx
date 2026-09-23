@@ -36,6 +36,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { CopyButton } from '@/components/shared/CopyButton';
 
 export const CustomersPage: React.FC = () => {
   const { role } = useAuth();
@@ -176,24 +177,41 @@ export const CustomersPage: React.FC = () => {
   const columns: ColumnDef<User>[] = [
     {
       key: 'name',
-      header: 'Customer Details',
+      header: 'Customer Name',
+      render: (c) => {
+        const name = c.fullName || `${c.firstName} ${c.lastName}`;
+        return (
+          <div className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span>{name}</span>
+            <CopyButton text={name} label="Customer Name" className="opacity-70 hover:opacity-100" />
+          </div>
+        );
+      },
+    },
+    {
+      key: 'email',
+      header: 'Email Address',
       render: (c) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">
-            {c.fullName || `${c.firstName} ${c.lastName}`}
-          </span>
-          <span className="text-xs text-muted-foreground">{c.email}</span>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>{c.email}</span>
+          <CopyButton text={c.email} label="Email" className="opacity-70 hover:opacity-100" />
         </div>
       ),
     },
     {
       key: 'code',
       header: 'Customer ID',
-      render: (c) => (
-        <code className="text-xs font-mono bg-muted/60 px-1.5 py-0.5 rounded text-foreground font-semibold">
-          {(c.profile as CustomerProfile)?.customerCode || 'N/A'}
-        </code>
-      ),
+      render: (c) => {
+        const code = (c.profile as CustomerProfile)?.customerCode;
+        return (
+          <div className="flex items-center gap-1.5">
+            <code className="text-xs font-mono bg-muted/60 px-1.5 py-0.5 rounded text-foreground font-semibold">
+              {code || 'N/A'}
+            </code>
+            {code && <CopyButton text={code} label="Customer ID" className="opacity-70 hover:opacity-100" />}
+          </div>
+        );
+      },
     },
     {
       key: 'tier',

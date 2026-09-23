@@ -27,6 +27,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { CopyButton } from '@/components/shared/CopyButton';
 
 export const EmployeesPage: React.FC = () => {
   const { user, role } = useAuth();
@@ -173,23 +174,40 @@ export const EmployeesPage: React.FC = () => {
     {
       key: 'name',
       header: 'Employee Name',
+      render: (e) => {
+        const name = e.fullName || `${e.firstName} ${e.lastName}`;
+        return (
+          <div className="flex items-center gap-1.5 font-semibold text-foreground">
+            <span>{name}</span>
+            <CopyButton text={name} label="Employee Name" className="opacity-70 hover:opacity-100" />
+          </div>
+        );
+      },
+    },
+    {
+      key: 'email',
+      header: 'Email Address',
       render: (e) => (
-        <div className="flex flex-col">
-          <span className="font-semibold text-foreground">
-            {e.fullName || `${e.firstName} ${e.lastName}`}
-          </span>
-          <span className="text-xs text-muted-foreground">{e.email}</span>
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+          <span>{e.email}</span>
+          <CopyButton text={e.email} label="Email" className="opacity-70 hover:opacity-100" />
         </div>
       ),
     },
     {
       key: 'code',
-      header: 'Code / ID',
-      render: (e) => (
-        <code className="text-xs font-mono bg-muted/60 px-1.5 py-0.5 rounded text-foreground font-semibold">
-          {(e.profile as EmployeeProfile)?.employeeCode || 'N/A'}
-        </code>
-      ),
+      header: 'Staff / Emp Code',
+      render: (e) => {
+        const code = (e.profile as EmployeeProfile)?.employeeCode;
+        return (
+          <div className="flex items-center gap-1.5">
+            <code className="text-xs font-mono bg-muted/60 px-1.5 py-0.5 rounded text-foreground font-semibold">
+              {code || 'N/A'}
+            </code>
+            {code && <CopyButton text={code} label="Employee Code" className="opacity-70 hover:opacity-100" />}
+          </div>
+        );
+      },
     },
     {
       key: 'designation',

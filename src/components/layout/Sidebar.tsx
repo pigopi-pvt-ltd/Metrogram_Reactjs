@@ -1,6 +1,6 @@
-import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   LayoutDashboard,
   Users,
@@ -11,8 +11,8 @@ import {
   Layers,
   Home,
   X,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -32,73 +32,73 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const getNavItems = (): NavItem[] => {
     switch (role) {
-      case 'SUPER_ADMIN':
+      case "SUPER_ADMIN":
         return [
           {
-            title: 'Dashboard',
-            href: '/dashboard',
+            title: "Dashboard",
+            href: "/dashboard",
             icon: <LayoutDashboard className="h-4 w-4" />,
           },
           {
-            title: 'Managers',
-            href: '/managers',
+            title: "Managers",
+            href: "/managers",
             icon: <Users className="h-4 w-4" />,
           },
           {
-            title: 'Employees',
-            href: '/employees',
+            title: "Employees",
+            href: "/employees",
             icon: <Briefcase className="h-4 w-4" />,
           },
           {
-            title: 'Customers',
-            href: '/customers',
+            title: "Customers",
+            href: "/customers",
             icon: <UserCheck className="h-4 w-4" />,
           },
         ];
 
-      case 'MANAGER':
+      case "MANAGER":
         return [
           {
-            title: 'Dashboard',
-            href: '/dashboard',
+            title: "Dashboard",
+            href: "/dashboard",
             icon: <LayoutDashboard className="h-4 w-4" />,
           },
           {
-            title: 'Team Employees',
-            href: '/employees',
+            title: "Team Employees",
+            href: "/employees",
             icon: <Briefcase className="h-4 w-4" />,
           },
           {
-            title: 'Customers',
-            href: '/customers',
+            title: "Customers",
+            href: "/customers",
             icon: <UserCheck className="h-4 w-4" />,
           },
         ];
 
-      case 'EMPLOYEE':
+      case "EMPLOYEE":
         return [
           {
-            title: 'Dashboard',
-            href: '/dashboard',
+            title: "Dashboard",
+            href: "/dashboard",
             icon: <LayoutDashboard className="h-4 w-4" />,
           },
           {
-            title: 'Register Customer',
-            href: '/customers/new',
+            title: "Register Customer",
+            href: "/customers/new",
             icon: <UserPlus className="h-4 w-4" />,
           },
           {
-            title: 'Customer Directory',
-            href: '/customers',
+            title: "Customer Directory",
+            href: "/customers",
             icon: <UserCheck className="h-4 w-4" />,
           },
         ];
 
-      case 'CUSTOMER':
+      case "CUSTOMER":
         return [
           {
-            title: 'My Portal',
-            href: '/customer/home',
+            title: "My Portal",
+            href: "/customer/home",
             icon: <Home className="h-4 w-4" />,
           },
         ];
@@ -158,11 +158,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   onClick={onClose}
                   className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
                     isActive
-                      ? 'bg-primary text-primary-foreground shadow-xs font-semibold'
-                      : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                      ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+                      : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                   }`}
                 >
-                  <span className={isActive ? 'text-primary-foreground' : 'text-muted-foreground'}>
+                  <span
+                    className={
+                      isActive
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground"
+                    }
+                  >
                     {item.icon}
                   </span>
                   <span>{item.title}</span>
@@ -179,17 +185,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       </div>
 
       {/* Footer / System Info */}
-      <div className="p-4 border-t bg-muted/20 m-3 rounded-xl border">
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-background border shadow-2xs text-muted-foreground">
-            <Shield className="h-4 w-4" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xs font-semibold text-foreground">MetroGram Guard</span>
-            <span className="text-[10px] text-muted-foreground">RBAC Enforced</span>
-          </div>
-        </div>
-      </div>
+      {/* <div className="p-4 border-t bg-muted/20 m-3 rounded-xl border"> */}
+      {/*   <div className="flex items-center gap-2.5"> */}
+      {/*     <div className="p-2 rounded-lg bg-background border shadow-2xs text-muted-foreground"> */}
+      {/*       <Shield className="h-4 w-4" /> */}
+      {/*     </div> */}
+      {/*     <div className="flex flex-col"> */}
+      {/*       <span className="text-xs font-semibold text-foreground"> */}
+      {/*         MetroGram Guard */}
+      {/*       </span> */}
+      {/*       <span className="text-[10px] text-muted-foreground"> */}
+      {/*         RBAC Enforced */}
+      {/*       </span> */}
+      {/*     </div> */}
+      {/*   </div> */}
+      {/* </div> */}
     </div>
   );
 

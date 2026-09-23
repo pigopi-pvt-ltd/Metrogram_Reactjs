@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   TrendingUp,
 } from 'lucide-react';
+import { CopyButton } from '@/components/shared/CopyButton';
 
 export const CustomerPortalPage: React.FC = () => {
   const { user } = useAuth();
@@ -40,6 +41,8 @@ export const CustomerPortalPage: React.FC = () => {
   const address = profile?.address;
   const membershipTier = profile?.membershipType || 'VIP';
   const loyaltyPoints = profile?.loyaltyPoints ?? 350;
+  const customerCode = profile?.customerCode || 'CUST-8001';
+  const fullName = activeUser?.fullName || `${activeUser?.firstName || ''} ${activeUser?.lastName || ''}`.trim() || 'Valued Member';
 
   const tierBenefits = {
     VIP: [
@@ -63,7 +66,7 @@ export const CustomerPortalPage: React.FC = () => {
   const benefits = tierBenefits[membershipTier] || tierBenefits.REGULAR;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       {/* Welcome Hero Card */}
       <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-card via-card to-muted/40 p-6 sm:p-8 shadow-md">
         <div className="absolute top-0 right-0 -mt-12 -mr-12 h-64 w-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
@@ -80,11 +83,14 @@ export const CustomerPortalPage: React.FC = () => {
                 </h1>
                 <MembershipBadge tier={membershipTier} />
               </div>
-              <p className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
-                <span>Account ID: {profile?.customerCode || 'CUST-8001'}</span>
+              <div className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2 flex-wrap">
+                <span className="flex items-center gap-1 font-mono font-medium">
+                  Account ID: {customerCode}
+                  <CopyButton value={customerCode} label="Account ID" />
+                </span>
                 <span>•</span>
                 <StatusBadge isActive={activeUser?.isActive ?? true} />
-              </p>
+              </div>
             </div>
           </div>
 
@@ -115,29 +121,38 @@ export const CustomerPortalPage: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 pt-1 text-sm">
-            <div className="flex flex-col space-y-1 pb-3 border-b">
-              <span className="text-xs text-muted-foreground">Full Legal Name</span>
-              <span className="font-semibold text-foreground">
-                {activeUser?.fullName || `${activeUser?.firstName} ${activeUser?.lastName}`}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 pb-3 border-b">
-              <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+            <div className="flex items-center justify-between pb-3 border-b">
               <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Email Address</span>
-                <span className="font-medium text-foreground truncate">{activeUser?.email}</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 pb-3 border-b">
-              <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
-              <div className="flex flex-col">
-                <span className="text-xs text-muted-foreground">Phone Number</span>
-                <span className="font-medium text-foreground">
-                  {activeUser?.phoneNumber || '+1 (444) 123-456'}
+                <span className="text-xs text-muted-foreground">Full Legal Name</span>
+                <span className="font-semibold text-foreground">
+                  {fullName}
                 </span>
               </div>
+              <CopyButton value={fullName} label="Full Name" />
+            </div>
+
+            <div className="flex items-center justify-between pb-3 border-b">
+              <div className="flex items-center gap-3 min-w-0">
+                <Mail className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs text-muted-foreground">Email Address</span>
+                  <span className="font-medium text-foreground truncate">{activeUser?.email}</span>
+                </div>
+              </div>
+              {activeUser?.email && <CopyButton value={activeUser.email} label="Email Address" />}
+            </div>
+
+            <div className="flex items-center justify-between pb-3 border-b">
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-muted-foreground shrink-0" />
+                <div className="flex flex-col">
+                  <span className="text-xs text-muted-foreground">Phone Number</span>
+                  <span className="font-medium text-foreground">
+                    {activeUser?.phoneNumber || '+91 91234 56789'}
+                  </span>
+                </div>
+              </div>
+              {activeUser?.phoneNumber && <CopyButton value={activeUser.phoneNumber} label="Phone Number" />}
             </div>
 
             <div className="flex items-center gap-3">
