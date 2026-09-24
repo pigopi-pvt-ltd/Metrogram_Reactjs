@@ -27,6 +27,8 @@ import {
   Moon,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Calculator,
   Search,
   MapPin,
@@ -66,13 +68,49 @@ import { toast } from 'sonner';
 // 1. DATA MODELS & CONSTANTS
 // ==========================================
 
-// Hero Slider Background Images (Rotating every 5s)
-const HERO_BACKGROUND_IMAGES = [
-  { id: 0, image: '/hero-medical.jpg', alt: 'Metrogram Health Card at Hospital Billing Counter' },
-  { id: 1, image: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&auto=format&fit=crop&q=85', alt: 'Elderly and Family Hospital Care Coverage' },
-  { id: 2, image: 'https://images.unsplash.com/photo-1587745416684-47b8838280f9?w=1920&auto=format&fit=crop&q=85', alt: 'Cashless Emergency Ambulance & ICU Coverage' },
-  { id: 3, image: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&auto=format&fit=crop&q=85', alt: '50% Discount on NABL Lab Diagnostics' },
-  { id: 4, image: 'https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=1920&auto=format&fit=crop&q=85', alt: 'Surgeries Covered Across Partner Hospitals in Bihar' },
+// Hero Carousel Slides (Matching mock layout)
+interface HeroSlide {
+  id: number;
+  title: string;
+  badgeTitle: string;
+  description: string;
+  bgImage: string;
+  alt: string;
+}
+
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 0,
+    title: 'Health Card Collection',
+    badgeTitle: 'Health Card Collection',
+    description: 'Discover our range of transparent health cards crafted to cover up to 75% of your surgery, ICU, and hospital bills naturally.',
+    bgImage: '/hero-medical.jpg',
+    alt: 'Metrogram Health Card at Hospital Billing Counter',
+  },
+  {
+    id: 1,
+    title: 'Family Shield Protection',
+    badgeTitle: 'Family Shield Protection',
+    description: 'Comprehensive annual care designed to protect up to 6 family members with Day-1 pre-existing coverage and priority hospital admission.',
+    bgImage: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&auto=format&fit=crop&q=85',
+    alt: 'Elderly and Family Hospital Care Coverage',
+  },
+  {
+    id: 2,
+    title: 'Emergency Care Shield',
+    badgeTitle: 'Emergency Care Shield',
+    description: 'Round-the-clock emergency support, cashless ambulance coordination, and direct ICU bed charge coverage across Bihar.',
+    bgImage: 'https://images.unsplash.com/photo-1587745416684-47b8838280f9?w=1920&auto=format&fit=crop&q=85',
+    alt: 'Cashless Emergency Ambulance & ICU Coverage',
+  },
+  {
+    id: 3,
+    title: 'Diagnostic Care Suite',
+    badgeTitle: 'Diagnostic Care Suite',
+    description: 'Enjoy flat 50% instant savings across NABL pathology tests, MRI, CT scans, and ultrasound at 120+ partner centers.',
+    bgImage: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&auto=format&fit=crop&q=85',
+    alt: '50% Discount on NABL Lab Diagnostics',
+  },
 ];
 
 // Card Membership Plans
@@ -103,8 +141,8 @@ const METROGRAM_CARD_PLANS: CardPlan[] = [
     id: 'plan-silver',
     name: 'Metrogram Silver Card',
     tier: 'Individual Care',
-    price: 499,
-    regularPrice: 1499,
+    price: 100,
+    regularPrice: 299,
     validity: '1 Year (365 Days)',
     membersCount: '1 Individual',
     colorScheme: {
@@ -129,8 +167,8 @@ const METROGRAM_CARD_PLANS: CardPlan[] = [
     id: 'plan-gold',
     name: 'Metrogram Gold Family Shield',
     tier: 'Family Complete (Most Popular)',
-    price: 999,
-    regularPrice: 2999,
+    price: 200,
+    regularPrice: 599,
     validity: '1 Year (365 Days)',
     membersCount: '4 Family Members',
     popular: true,
@@ -158,8 +196,8 @@ const METROGRAM_CARD_PLANS: CardPlan[] = [
     id: 'plan-platinum',
     name: 'Metrogram Platinum Super Shield',
     tier: 'All-Inclusive Extended Family',
-    price: 1999,
-    regularPrice: 4999,
+    price: 300,
+    regularPrice: 899,
     validity: '1 Year (365 Days)',
     membersCount: 'Up to 6 Members',
     badge: 'MAXIMUM COVERAGE & SENIOR CARE',
@@ -436,7 +474,7 @@ const COMPARISON_ROWS = [
   },
   {
     feature: 'Annual Membership Cost for 4 Members',
-    metrogramCard: 'Just ₹999 / year (Fixed)',
+    metrogramCard: 'Just ₹200 / year (Fixed)',
     insurance: '₹22,000 – ₹45,000+ / year',
     ayushman: 'Free (Govt. sponsored for eligible BPL)',
   },
@@ -495,7 +533,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How many family members are covered under one Metrogram Card?',
-    a: 'Our Gold Family Card (₹999/yr) covers up to 4 members (Self, Spouse, and 2 Children or Parents). Our Platinum Super Shield (₹1,999/yr) covers up to 6 members, including elderly in-laws. You receive one primary physical card plus instant digital QR cards for every family member on WhatsApp.',
+    a: 'Our Gold Family Card (₹200/yr) covers up to 4 members (Self, Spouse, and 2 Children or Parents). Our Platinum Super Shield (₹300/yr) covers up to 6 members, including elderly in-laws. You receive one primary physical card plus instant digital QR cards for every family member on WhatsApp.',
   },
   {
     q: 'Which private hospitals and cities in Bihar accept the Metrogram Card?',
@@ -512,15 +550,23 @@ export const LandingPage: React.FC = () => {
   const { isAuthenticated, role } = useAuth();
   const navigate = useNavigate();
 
-  // Hero Background Image Slider (5-second auto transition)
+  // Hero Carousel Slider (5-second auto transition + manual prev/next)
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % HERO_BACKGROUND_IMAGES.length);
+      setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const handlePrevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  };
+
+  const handleNextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+  };
 
   // Savings Calculator State
   const [selectedCalcProcedure, setSelectedCalcProcedure] = useState<ProcedureSaving>(
@@ -540,7 +586,7 @@ export const LandingPage: React.FC = () => {
     name: '',
     phone: '',
     city: 'Patna',
-    plan: 'Metrogram Gold Family Shield (₹999/yr)',
+    plan: 'Metrogram Gold Family Shield (₹200/yr)',
     familyMembers: '4 Members (Self, Spouse, 2 Kids/Parents)',
     message: '',
   });
@@ -586,7 +632,7 @@ export const LandingPage: React.FC = () => {
       name: '',
       phone: '',
       city: 'Patna',
-      plan: 'Metrogram Gold Family Shield (₹999/yr)',
+      plan: 'Metrogram Gold Family Shield (₹200/yr)',
       familyMembers: '4 Members (Self, Spouse, 2 Kids/Parents)',
       message: '',
     });
@@ -639,44 +685,33 @@ export const LandingPage: React.FC = () => {
       <header className="bg-white/95 dark:bg-[#0F172A]/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 sticky top-8 z-40 shadow-xs">
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 h-20 flex items-center justify-between">
           {/* Brand Logo */}
-          <Link to="/" className="flex items-center gap-3.5 group">
-            <div className="h-12 w-12 rounded-xl bg-[#97144D] flex items-center justify-center text-white shadow-md shadow-[#97144D]/25 group-hover:scale-105 transition-transform">
-              <CreditCard className="h-7 w-7 stroke-[2.2]" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-2xl font-black tracking-tight text-[#97144D] dark:text-rose-400">
-                  METROGRAM
-                </span>
-                <span className="bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-[10px] font-extrabold px-2 py-0.5 rounded-sm border border-[#97144D]/20">
-                  HEALTH CARD
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold tracking-wide">
-                Show at Hospital & Get Most of Your Bill Covered
-              </p>
-            </div>
+          <Link to="/" className="flex items-center gap-2 group py-1">
+            <img
+              src="/logo.png"
+              alt="Metrogram Health Card"
+              className="h-11 sm:h-13 w-auto object-contain transition-transform group-hover:scale-[1.02]"
+            />
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden xl:flex items-center gap-7 text-sm font-semibold text-slate-700 dark:text-slate-300">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-700 dark:text-slate-300">
             <a href="#how-it-works" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              How Card Works
+              How It Works
             </a>
             <a href="#plans" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Card Plans & Pricing
+              Plans
             </a>
             <a href="#calculator" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Savings Calculator
+              Calculator
             </a>
             <a href="#coverage" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Covered Treatments
+              Treatments
             </a>
             <a href="#hospitals" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              120+ Hospitals
+              Hospitals
             </a>
             <a href="#comparison" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Card vs Insurance
+              Comparison
             </a>
             <a href="#faqs" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
               FAQs
@@ -733,116 +768,62 @@ export const LandingPage: React.FC = () => {
         </div>
       </header>
 
-      {/* 3. HERO SECTION — MINIMAL, FULL-VISIBILITY BACKGROUND SLIDER */}
-      <section className="relative min-h-[85vh] lg:min-h-[82vh] flex items-center justify-center overflow-hidden">
-        {/* FULL BACKGROUND IMAGES WITH SMOOTH 5s SLIDER TRANSITIONS */}
-        {HERO_BACKGROUND_IMAGES.map((slide, index) => (
+      {/* 3. HERO SECTION — HALF-PAGE BANNER CAROUSEL (Matching Hero Mock UI) */}
+      <section className="relative w-full h-[420px] sm:h-[460px] md:h-[490px] lg:h-[510px] flex items-center overflow-hidden bg-[#0A101D] border-b border-slate-200 dark:border-slate-800 select-none">
+        {/* Background Image Carousel with Cross-Fade */}
+        {HERO_SLIDES.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 transform ${
-              index === currentSlide
-                ? 'opacity-100 scale-100 z-0'
-                : 'opacity-0 scale-105 pointer-events-none -z-10'
+            className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ease-in-out ${
+              index === currentSlide ? 'opacity-100 z-0' : 'opacity-0 pointer-events-none -z-10'
             }`}
             style={{
-              backgroundImage: `url('${slide.image}')`,
+              backgroundImage: `url('${slide.bgImage}')`,
             }}
             aria-label={slide.alt}
           />
         ))}
 
-        {/* ULTRA-LIGHT SUBTLE SCRIM SO BACKGROUND IMAGES REMAIN 100% VISIBLE & VIVID */}
-        <div className="absolute inset-0 bg-black/15 dark:bg-black/35 z-1 pointer-events-none" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#FAFAFA] dark:from-[#0B0F19] via-transparent to-transparent z-1 pointer-events-none" />
+        {/* Cinematic Scrim & Vignette */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/35 dark:from-black/90 dark:via-black/75 dark:to-black/60 z-1 pointer-events-none" />
+        <div className="absolute inset-0 bg-radial-at-c from-transparent via-black/20 to-black/70 pointer-events-none z-1" />
 
-        {/* Ambient Glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#97144D]/10 dark:bg-[#97144D]/20 rounded-full blur-3xl pointer-events-none z-1" />
+        {/* Left Arrow Navigation Button */}
+        <button
+          type="button"
+          onClick={handlePrevSlide}
+          className="absolute left-2.5 sm:left-5 md:left-7 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-xl flex items-center justify-center transition-all hover:scale-110 z-20 cursor-pointer border border-white/40"
+          aria-label="Previous Slide"
+        >
+          <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+        </button>
 
-        {/* MINIMAL, CENTERED HERO CONTENT */}
-        <div className="relative z-10 w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20 py-16 text-center">
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Top Pill Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border border-white/60 dark:border-white/10 text-[#97144D] dark:text-rose-200 text-xs font-bold tracking-wide shadow-sm">
-              <ShieldCheck className="h-4 w-4 text-[#97144D] dark:text-rose-300" />
-              <span>BIHAR’S #1 HEALTH MEMBERSHIP CARD</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-emerald-700 dark:text-emerald-300 font-extrabold">Like Ayushman Card for Private Hospitals</span>
-            </div>
+        {/* Right Arrow Navigation Button */}
+        <button
+          type="button"
+          onClick={handleNextSlide}
+          className="absolute right-2.5 sm:right-5 md:right-7 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/90 hover:bg-white text-slate-800 shadow-xl flex items-center justify-center transition-all hover:scale-110 z-20 cursor-pointer border border-white/40"
+          aria-label="Next Slide"
+        >
+          <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+        </button>
 
-            {/* High-Impact Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.14]">
-              Show Your Metrogram Card & Get{' '}
-              <span className="text-[#97144D] dark:text-transparent dark:bg-clip-text dark:bg-gradient-to-r dark:from-rose-300 dark:via-rose-200 dark:to-amber-200 underline decoration-[#97144D]/40 dark:decoration-[#97144D]/80 decoration-4">
-                Up to 75% of Hospital Bills Covered
-              </span>
-            </h1>
 
-            {/* Crisp 1-Line Description */}
-            <p className="text-base sm:text-lg text-slate-800 dark:text-slate-100 max-w-2xl mx-auto font-medium leading-relaxed drop-shadow-xs">
-              Instant on-counter bill discounts on planned surgeries, ICU admissions, and diagnostics at 120+ top private hospitals in Bihar. Zero waiting period & pre-existing diseases covered from Day 1.
-            </p>
-
-            {/* Clean CTAs */}
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                onClick={() => handleOpenApplyModal()}
-                className="w-full sm:w-auto h-13 px-8 text-base bg-[#97144D] hover:bg-[#820d3f] text-white font-bold rounded-2xl shadow-xl shadow-[#97144D]/30 transition-all hover:scale-[1.02] cursor-pointer"
-              >
-                <CreditCard className="h-5 w-5 mr-2" />
-                <span>Get Health Card (From ₹499/yr)</span>
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-
-              <a
-                href="#plans"
-                className="w-full sm:w-auto h-13 px-7 inline-flex items-center justify-center bg-white/90 hover:bg-white text-slate-900 border border-slate-200 dark:bg-slate-900/85 dark:hover:bg-slate-800 dark:text-white dark:border-white/20 rounded-2xl font-bold backdrop-blur-md transition-all text-sm cursor-pointer shadow-sm"
-              >
-                <Calculator className="h-4 w-4 mr-2 text-[#97144D] dark:text-rose-300" />
-                <span>View Plans & Hospital Savings</span>
-              </a>
-            </div>
-
-            {/* Floating Minimal Trust Chips */}
-            <div className="pt-3 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-slate-800 dark:text-slate-200">
-              <span className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-xs flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>120+ Empanelled Hospitals</span>
-              </span>
-              <span className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-xs flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>Day 1 Pre-Existing Coverage</span>
-              </span>
-              <span className="px-3.5 py-1.5 rounded-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-xs flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span>65,000+ Active Cardholders</span>
-              </span>
-              <a
-                href="tel:+919123456789"
-                className="px-3.5 py-1.5 rounded-full bg-rose-50/90 dark:bg-rose-950/80 backdrop-blur-md border border-rose-200 dark:border-rose-900/50 text-[#97144D] dark:text-rose-200 shadow-xs flex items-center gap-1.5 hover:underline"
-              >
-                <Phone className="h-3.5 w-3.5 text-[#97144D]" />
-                <span>24/7 Helpline: +91 91234 56789</span>
-              </a>
-            </div>
-          </div>
-
-          {/* SLIDE INDICATORS (. . . _ .) */}
-          <div className="pt-12 flex items-center justify-center gap-2">
-            {HERO_BACKGROUND_IMAGES.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setCurrentSlide(idx)}
-                className={`transition-all duration-300 cursor-pointer ${
-                  idx === currentSlide
-                    ? 'w-7 h-2 rounded-full bg-[#97144D] dark:bg-rose-400 shadow-sm'
-                    : 'w-2 h-2 rounded-full bg-slate-400/60 dark:bg-white/40 hover:bg-slate-600 dark:hover:bg-white/70'
-                }`}
-                aria-label={`Slide ${idx + 1}${idx === currentSlide ? ' (Active)' : ''}`}
-              />
-            ))}
-          </div>
+        {/* Bottom Pagination Dots (Active green pill like mock) */}
+        <div className="absolute bottom-3.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
+          {HERO_SLIDES.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setCurrentSlide(idx)}
+              className={`transition-all duration-300 cursor-pointer ${
+                idx === currentSlide
+                  ? 'w-7 sm:w-8 h-2.5 rounded-full bg-emerald-500 shadow-md'
+                  : 'w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white/90'
+              }`}
+              aria-label={`Slide ${idx + 1}${idx === currentSlide ? ' (Active)' : ''}`}
+            />
+          ))}
         </div>
       </section>
 
@@ -873,7 +854,7 @@ export const LandingPage: React.FC = () => {
                 1. Get Your Metrogram Card
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Choose your family plan starting at ₹499/yr. Receive your instant Digital QR Card on WhatsApp in 5 minutes and a physical Smart Card at your address.
+                Choose your family plan starting at ₹100/yr. Receive your instant Digital QR Card on WhatsApp in 5 minutes and a physical Smart Card at your address.
               </p>
             </div>
 
@@ -994,7 +975,7 @@ export const LandingPage: React.FC = () => {
                         </span>
                       </div>
                       <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
-                        Less than ₹3/day to protect your whole family.
+                        Less than ₹1/day to protect your whole family.
                       </div>
                     </div>
 
@@ -1708,14 +1689,14 @@ export const LandingPage: React.FC = () => {
                         onChange={(e) => setFormData({ ...formData, plan: e.target.value })}
                         className="w-full h-11 px-3 text-sm rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                       >
-                        <option value="Metrogram Gold Family Shield (₹999/yr)">
-                          Metrogram Gold Family Shield (₹999/yr) — 4 Members
+                        <option value="Metrogram Gold Family Shield (₹200/yr)">
+                          Metrogram Gold Family Shield (₹200/yr) — 4 Members
                         </option>
-                        <option value="Metrogram Platinum Super Shield (₹1,999/yr)">
-                          Metrogram Platinum Super Shield (₹1,999/yr) — 6 Members
+                        <option value="Metrogram Platinum Super Shield (₹300/yr)">
+                          Metrogram Platinum Super Shield (₹300/yr) — 6 Members
                         </option>
-                        <option value="Metrogram Silver Card (₹499/yr)">
-                          Metrogram Silver Card (₹499/yr) — 1 Individual
+                        <option value="Metrogram Silver Card (₹100/yr)">
+                          Metrogram Silver Card (₹100/yr) — 1 Individual
                         </option>
                       </select>
                     </div>
@@ -1767,19 +1748,13 @@ export const LandingPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
             {/* Col 1 & 2: Brand Story */}
             <div className="lg:col-span-2 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-[#97144D] flex items-center justify-center text-white">
-                  <CreditCard className="h-6 w-6" />
-                </div>
-                <div>
-                  <span className="text-xl font-black tracking-tight text-white">
-                    METROGRAM
-                  </span>
-                  <span className="text-xs block text-rose-300 font-semibold">
-                    Health Card Network
-                  </span>
-                </div>
-              </div>
+              <Link to="/" className="inline-block">
+                <img
+                  src="/logo.png"
+                  alt="Metrogram Health Card"
+                  className="h-11 w-auto object-contain brightness-110 drop-shadow-md"
+                />
+              </Link>
               <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
                 Metrogram Healthcare Private Limited is Bihar’s leading hospital bill coverage membership network. Empowering families with instant on-counter hospital bill subsidies at 120+ top private medical centers across Bihar.
               </p>
@@ -2030,14 +2005,14 @@ export const LandingPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, plan: e.target.value })}
                   className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                 >
-                  <option value="Metrogram Gold Family Shield (₹999/yr)">
-                    Metrogram Gold Family Shield (₹999/yr) — 4 Members (Most Popular)
+                  <option value="Metrogram Gold Family Shield (₹200/yr)">
+                    Metrogram Gold Family Shield (₹200/yr) — 4 Members (Most Popular)
                   </option>
-                  <option value="Metrogram Platinum Super Shield (₹1,999/yr)">
-                    Metrogram Platinum Super Shield (₹1,999/yr) — 6 Members (Max Coverage)
+                  <option value="Metrogram Platinum Super Shield (₹300/yr)">
+                    Metrogram Platinum Super Shield (₹300/yr) — 6 Members (Max Coverage)
                   </option>
-                  <option value="Metrogram Silver Card (₹499/yr)">
-                    Metrogram Silver Card (₹499/yr) — 1 Individual
+                  <option value="Metrogram Silver Card (₹100/yr)">
+                    Metrogram Silver Card (₹100/yr) — 1 Individual
                   </option>
                 </select>
               </div>

@@ -116,18 +116,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <div className="flex flex-col">
         <div className="flex h-16 items-center justify-between px-6 border-b">
           <NavLink to="/" className="flex items-center gap-2.5 group">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs group-hover:scale-105 transition-transform">
-              <Layers className="h-5 w-5" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base font-bold tracking-tight text-foreground flex items-center gap-1">
-                MetroGram
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-              </span>
-              <span className="text-[10px] uppercase font-semibold tracking-wider text-muted-foreground">
-                RBAC Platform
-              </span>
-            </div>
+            <img
+              src="/logo.png"
+              alt="MetroGram"
+              className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
+            />
           </NavLink>
 
           {onClose && (

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
@@ -172,19 +172,13 @@ export const LoginPage: React.FC = () => {
       <div className="relative z-10 w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         {/* Left column: Branding & Feature Highlights */}
         <div className="hidden lg:flex flex-col space-y-6 lg:col-span-5 pr-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-              <Layers className="h-6 w-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                MetroGram
-              </h1>
-              <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">
-                Enterprise RBAC Platform
-              </p>
-            </div>
-          </div>
+          <Link to="/" className="inline-block">
+            <img
+              src="/logo.png"
+              alt="MetroGram"
+              className="h-12 w-auto object-contain transition-transform hover:scale-105"
+            />
+          </Link>
 
           <p className="text-muted-foreground text-sm leading-relaxed">
             A next-generation role-based access management portal providing strict authorization, granular controls, and real-time operations across departments.
