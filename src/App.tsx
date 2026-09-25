@@ -1,21 +1,20 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@/contexts/ThemeContext';
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import { Toaster } from 'sonner';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { Toaster } from "sonner";
 
-import { AppLayout } from '@/components/layout/AppLayout';
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+import { AppLayout } from "@/components/layout/AppLayout";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 
-import { LoginPage } from '@/pages/auth/LoginPage';
-import { LandingPage } from '@/pages/landing/LandingPage';
-import { DashboardPage } from '@/pages/dashboard/DashboardPage';
-import { ManagersPage } from '@/pages/managers/ManagersPage';
-import { EmployeesPage } from '@/pages/employees/EmployeesPage';
-import { CustomersPage } from '@/pages/customers/CustomersPage';
-import { CustomerRegisterPage } from '@/pages/customers/CustomerRegisterPage';
-import { CustomerPortalPage } from '@/pages/customer-portal/CustomerPortalPage';
-import { NotFoundPage } from '@/pages/not-found/NotFoundPage';
+import { LoginPage } from "@/pages/auth/LoginPage";
+import { LandingPage } from "@/pages/landing/LandingPage";
+import { DashboardPage } from "@/pages/dashboard/DashboardPage";
+import { ManagersPage } from "@/pages/managers/ManagersPage";
+import { EmployeesPage } from "@/pages/employees/EmployeesPage";
+import { CustomersPage } from "@/pages/customers/CustomersPage";
+import { CustomerRegisterPage } from "@/pages/customers/CustomerRegisterPage";
+import { CustomerPortalPage } from "@/pages/customer-portal/CustomerPortalPage";
+import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 
 export function App() {
   return (
@@ -35,7 +34,9 @@ export function App() {
               <Route
                 path="/dashboard"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'MANAGER', 'EMPLOYEE']}>
+                  <ProtectedRoute
+                    allowedRoles={["SUPER_ADMIN", "MANAGER", "EMPLOYEE"]}
+                  >
                     <DashboardPage />
                   </ProtectedRoute>
                 }
@@ -45,7 +46,7 @@ export function App() {
               <Route
                 path="/managers"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN']}>
+                  <ProtectedRoute allowedRoles={["SUPER_ADMIN"]}>
                     <ManagersPage />
                   </ProtectedRoute>
                 }
@@ -55,7 +56,7 @@ export function App() {
               <Route
                 path="/employees"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'MANAGER']}>
+                  <ProtectedRoute allowedRoles={["SUPER_ADMIN", "MANAGER"]}>
                     <EmployeesPage />
                   </ProtectedRoute>
                 }
@@ -65,7 +66,9 @@ export function App() {
               <Route
                 path="/customers"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'MANAGER', 'EMPLOYEE']}>
+                  <ProtectedRoute
+                    allowedRoles={["SUPER_ADMIN", "MANAGER", "EMPLOYEE"]}
+                  >
                     <CustomersPage />
                   </ProtectedRoute>
                 }
@@ -75,7 +78,9 @@ export function App() {
               <Route
                 path="/customers/new"
                 element={
-                  <ProtectedRoute allowedRoles={['SUPER_ADMIN', 'MANAGER', 'EMPLOYEE']}>
+                  <ProtectedRoute
+                    allowedRoles={["SUPER_ADMIN", "MANAGER", "EMPLOYEE"]}
+                  >
                     <CustomerRegisterPage />
                   </ProtectedRoute>
                 }
@@ -85,7 +90,7 @@ export function App() {
               <Route
                 path="/customer/home"
                 element={
-                  <ProtectedRoute allowedRoles={['CUSTOMER']}>
+                  <ProtectedRoute allowedRoles={["CUSTOMER"]}>
                     <CustomerPortalPage />
                   </ProtectedRoute>
                 }

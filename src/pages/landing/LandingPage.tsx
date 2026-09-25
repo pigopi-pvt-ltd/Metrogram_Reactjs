@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   ShieldCheck,
   Stethoscope,
@@ -21,8 +21,6 @@ import {
   Users,
   CheckCircle2,
   PhoneCall,
-  Sparkles,
-  ArrowRight,
   Sun,
   Moon,
   ChevronDown,
@@ -30,39 +28,37 @@ import {
   ChevronLeft,
   ChevronRight,
   Calculator,
-  Search,
   MapPin,
-  Clock,
   Award,
   BadgePercent,
   Pill,
-  Heart,
   UserCheck,
   Check,
   HelpCircle,
   Phone,
-  Mail,
-  Send,
-  Calendar,
-  AlertCircle,
-  Syringe,
   Ambulance,
-  HeartPulse,
   Microscope,
-  FileText,
   MessageSquare,
-  Shield,
-  ThumbsUp,
-  MapPinned,
-  ExternalLink,
-  QrCode,
-  Zap,
   CheckCircle,
   XCircle,
-  Percent,
   Wallet,
-} from 'lucide-react';
-import { toast } from 'sonner';
+  Brain,
+  Scan,
+  FlaskConical,
+  FileText,
+  Sparkles,
+  Briefcase,
+  Store,
+  TrendingUp,
+  Syringe,
+  Handshake,
+  DollarSign,
+  GraduationCap,
+  Building,
+  Truck,
+  FileCheck,
+} from "lucide-react";
+import { toast } from "sonner";
 
 // ==========================================
 // 1. DATA MODELS & CONSTANTS
@@ -81,39 +77,46 @@ interface HeroSlide {
 const HERO_SLIDES: HeroSlide[] = [
   {
     id: 0,
-    title: 'Health Card Collection',
-    badgeTitle: 'Health Card Collection',
-    description: 'Discover our range of transparent health cards crafted to cover up to 75% of your surgery, ICU, and hospital bills naturally.',
-    bgImage: '/hero-medical.jpg',
-    alt: 'Metrogram Health Card at Hospital Billing Counter',
+    title: "Metrogram Annual Membership Card",
+    badgeTitle: "Annual Membership • Just ₹100/Year",
+    description:
+      "Get complete 1-year access to exclusive discounts on Metrogram Pathology, Radiology (CT Scan, MRI, Ultrasound), and Diagnostic Psychography across Bihar.",
+    bgImage: "/hero-medical.jpg",
+    alt: "Metrogram Annual Membership Card for ₹100",
   },
   {
     id: 1,
-    title: 'Family Shield Protection',
-    badgeTitle: 'Family Shield Protection',
-    description: 'Comprehensive annual care designed to protect up to 6 family members with Day-1 pre-existing coverage and priority hospital admission.',
-    bgImage: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&auto=format&fit=crop&q=85',
-    alt: 'Elderly and Family Hospital Care Coverage',
+    title: "Metrogram Pathology & Blood Specimen Care",
+    badgeTitle: "Metrogram Pathology",
+    description:
+      "Advanced clinical pathology with certified diagnostics, standardized blood specimen collection, temperature-controlled processing, and rapid lab reporting.",
+    bgImage:
+      "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&auto=format&fit=crop&q=85",
+    alt: "Metrogram Pathology Laboratory Diagnostics",
   },
   {
     id: 2,
-    title: 'Emergency Care Shield',
-    badgeTitle: 'Emergency Care Shield',
-    description: 'Round-the-clock emergency support, cashless ambulance coordination, and direct ICU bed charge coverage across Bihar.',
-    bgImage: 'https://images.unsplash.com/photo-1587745416684-47b8838280f9?w=1920&auto=format&fit=crop&q=85',
-    alt: 'Cashless Emergency Ambulance & ICU Coverage',
+    title: "Advanced Radiology: CT Scan, MRI & Ultrasound",
+    badgeTitle: "Radiology Diagnostics",
+    description:
+      "High-precision diagnostic imaging suites: High-speed multi-slice CT Scan, Magnetic Resonance Imaging (MRI), and high-resolution 3D/4D Ultrasound sonography.",
+    bgImage:
+      "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1920&auto=format&fit=crop&q=85",
+    alt: "CT Scan MRI Ultrasound Radiology Diagnostics",
   },
   {
     id: 3,
-    title: 'Diagnostic Care Suite',
-    badgeTitle: 'Diagnostic Care Suite',
-    description: 'Enjoy flat 50% instant savings across NABL pathology tests, MRI, CT scans, and ultrasound at 120+ partner centers.',
-    bgImage: 'https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&auto=format&fit=crop&q=85',
-    alt: '50% Discount on NABL Lab Diagnostics',
+    title: "Specialized Diagnostic Psychography",
+    badgeTitle: "Psychography Suite",
+    description:
+      "Systematic psychographic profiling, cognitive evaluations, behavioral diagnostics, and mental health screenings guided by clinical experts.",
+    bgImage:
+      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&auto=format&fit=crop&q=85",
+    alt: "Specialized Diagnostic Psychography Assessments",
   },
 ];
 
-// Card Membership Plans
+// Card Membership Plans (Only ONE Card for ₹100 for One Year)
 interface CardPlan {
   id: string;
   name: string;
@@ -138,231 +141,90 @@ interface CardPlan {
 
 const METROGRAM_CARD_PLANS: CardPlan[] = [
   {
-    id: 'plan-silver',
-    name: 'Metrogram Silver Card',
-    tier: 'Individual Care',
+    id: "plan-annual-membership",
+    name: "Metrogram Annual Membership Card",
+    tier: "Official Healthcare Membership",
     price: 100,
-    regularPrice: 299,
-    validity: '1 Year (365 Days)',
-    membersCount: '1 Individual',
-    colorScheme: {
-      badgeBg: 'bg-slate-200 dark:bg-slate-800',
-      badgeText: 'text-slate-800 dark:text-slate-200',
-      border: 'border-slate-300 dark:border-slate-700',
-      gradient: 'from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800',
-    },
-    surgeryCoverage: 'Up to 40% Covered',
-    icuCoverage: '30% Bed Subsidy',
-    opdLabDiscount: 'Flat 40% OFF',
-    features: [
-      'Coverage for 1 Primary Cardholder',
-      'Up to 40% direct bill deduction on planned surgeries',
-      'Flat 40% discount on NABL blood tests & ECG/X-Ray',
-      '2 Free Doctor Teleconsultation Vouchers',
-      'Instant Digital QR Card on WhatsApp',
-      'No waiting period for accidental emergencies',
-    ],
-  },
-  {
-    id: 'plan-gold',
-    name: 'Metrogram Gold Family Shield',
-    tier: 'Family Complete (Most Popular)',
-    price: 200,
-    regularPrice: 599,
-    validity: '1 Year (365 Days)',
-    membersCount: '4 Family Members',
+    regularPrice: 499,
+    validity: "1 Year (365 Days)",
+    membersCount: "Cardholder & Family",
     popular: true,
-    badge: 'MOST CHOSEN BY BIHAR FAMILIES',
+    badge: "ONLY ₹100 FOR FULL 1 YEAR",
     colorScheme: {
-      badgeBg: 'bg-amber-100 dark:bg-amber-950/60',
-      badgeText: 'text-amber-800 dark:text-amber-300',
-      border: 'border-amber-400 dark:border-amber-500/60',
-      gradient: 'from-amber-50 to-rose-50 dark:from-slate-900 dark:to-rose-950/30',
+      badgeBg: "bg-rose-100 dark:bg-rose-950/60",
+      badgeText: "text-rose-800 dark:text-rose-300",
+      border: "border-[#97144D] dark:border-rose-500",
+      gradient:
+        "from-rose-50 to-slate-50 dark:from-slate-900 dark:to-rose-950/30",
     },
-    surgeryCoverage: 'Up to 60% Covered',
-    icuCoverage: '50% Bed & Room Rent',
-    opdLabDiscount: 'Flat 50% OFF',
+    surgeryCoverage: "Metrogram Pathology",
+    icuCoverage: "Radiology (CT, MRI, USG)",
+    opdLabDiscount: "Diagnostic Psychography",
     features: [
-      'Covers 4 Family Members (Self, Spouse, 2 Children or Parents)',
-      'Up to 60% of surgery bill covered at 120+ partner hospitals',
-      'Pre-existing conditions & Diabetes/BP covered from Day 1',
-      '50% coverage on ICU, HDU & Deluxe room rent charges',
-      'Flat 50% OFF on all Pathology, CT Scan & MRI scans',
-      'Physical Smart Card delivered + Digital QR Card instant',
-      '24/7 Priority Hospital Admission Assistance Desk',
-    ],
-  },
-  {
-    id: 'plan-platinum',
-    name: 'Metrogram Platinum Super Shield',
-    tier: 'All-Inclusive Extended Family',
-    price: 300,
-    regularPrice: 899,
-    validity: '1 Year (365 Days)',
-    membersCount: 'Up to 6 Members',
-    badge: 'MAXIMUM COVERAGE & SENIOR CARE',
-    colorScheme: {
-      badgeBg: 'bg-purple-100 dark:bg-purple-950/60',
-      badgeText: 'text-purple-800 dark:text-purple-300',
-      border: 'border-purple-300 dark:border-purple-700',
-      gradient: 'from-purple-50 to-slate-100 dark:from-slate-900 dark:to-purple-950/30',
-    },
-    surgeryCoverage: 'Up to 75% Covered',
-    icuCoverage: '60% ICU & OT Covered',
-    opdLabDiscount: 'Flat 60% OFF',
-    features: [
-      'Covers up to 6 Members (Includes Parents & In-laws, No Age Cap)',
-      'Up to 75% coverage on major surgeries & hospital stays',
-      '60% coverage on ICU bed, ventilator, and OT surgeon fees',
-      'Free Annual Full Body Health Package (worth ₹3,500)',
-      'Dedicated Personal Hospital Care Manager stationed at desk',
-      'Emergency Cashless ACLS Ambulance dispatch assistance',
-      'Zero-wait admission escort at all partner network hospitals',
+      "Full 1-Year (365 Days) Membership Validity for just ₹100",
+      "Metrogram Pathology: Comprehensive NABL blood & clinical tests",
+      "Standardized Blood Specimen Collection: Processing, Importance & Procedure",
+      "Radiology Diagnostics: Discounted rates on CT Scan, MRI & Ultrasound",
+      "Diagnostic Psychography: Structured mental & cognitive assessments",
+      "Instant Digital QR Card on WhatsApp within 5 minutes",
+      "Accepted across 120+ partner diagnostic & hospital centers in Bihar",
     ],
   },
 ];
 
-// Interactive Hospital Savings Calculator Data
-interface ProcedureSaving {
-  id: string;
-  procedure: string;
-  category: string;
-  marketBill: number;
-  metrogramCardBill: number;
-  savingsAmount: number;
-  coveragePercent: number;
-}
-
-const PROCEDURE_SAVINGS: ProcedureSaving[] = [
-  {
-    id: 'proc-delivery-normal',
-    procedure: 'Normal Maternity Delivery & Hospitalization',
-    category: 'Maternity',
-    marketBill: 35000,
-    metrogramCardBill: 12000,
-    savingsAmount: 23000,
-    coveragePercent: 65,
-  },
-  {
-    id: 'proc-delivery-csec',
-    procedure: 'Caesarean (C-Section) Delivery + 4-Day Stay',
-    category: 'Maternity',
-    marketBill: 65000,
-    metrogramCardBill: 24000,
-    savingsAmount: 41000,
-    coveragePercent: 63,
-  },
-  {
-    id: 'proc-gallbladder',
-    procedure: 'Laparoscopic Gallbladder Stone Surgery',
-    category: 'General Surgery',
-    marketBill: 55000,
-    metrogramCardBill: 19999,
-    savingsAmount: 35001,
-    coveragePercent: 64,
-  },
-  {
-    id: 'proc-appendix',
-    procedure: 'Laparoscopic Appendectomy (Appendix Removal)',
-    category: 'General Surgery',
-    marketBill: 45000,
-    metrogramCardBill: 16500,
-    savingsAmount: 28500,
-    coveragePercent: 63,
-  },
-  {
-    id: 'proc-kidney-stone',
-    procedure: 'Laser PCNL / URSL Kidney Stone Removal',
-    category: 'Urology',
-    marketBill: 50000,
-    metrogramCardBill: 18000,
-    savingsAmount: 32000,
-    coveragePercent: 64,
-  },
-  {
-    id: 'proc-knee-replace',
-    procedure: 'Total Knee Replacement Surgery (Single Knee)',
-    category: 'Orthopedics',
-    marketBill: 160000,
-    metrogramCardBill: 65000,
-    savingsAmount: 95000,
-    coveragePercent: 60,
-  },
-  {
-    id: 'proc-cardiac-stent',
-    procedure: 'Coronary Angiography + 1 Drug-Eluting Stent',
-    category: 'Cardiology',
-    marketBill: 130000,
-    metrogramCardBill: 55000,
-    savingsAmount: 75000,
-    coveragePercent: 58,
-  },
-  {
-    id: 'proc-icu-5days',
-    procedure: '5-Day Critical ICU Stay + Monitor & Ventilator',
-    category: 'Critical Care',
-    marketBill: 75000,
-    metrogramCardBill: 28000,
-    savingsAmount: 47000,
-    coveragePercent: 62,
-  },
-  {
-    id: 'proc-cataract-eye',
-    procedure: 'Cataract Eye Surgery with Foldable Phaco Lens',
-    category: 'Ophthalmology',
-    marketBill: 25000,
-    metrogramCardBill: 8500,
-    savingsAmount: 16500,
-    coveragePercent: 66,
-  },
-  {
-    id: 'proc-mri-scan',
-    procedure: 'MRI Brain / Spine Contrast Scan',
-    category: 'Diagnostics',
-    marketBill: 7500,
-    metrogramCardBill: 2800,
-    savingsAmount: 4700,
-    coveragePercent: 63,
-  },
-];
-
-// Covered Medical Categories
+// Covered Medical Categories (Exclusively Metrogram Pathology, Radiology, Psychography, Blood Specimen Collection)
 const COVERED_CATEGORIES = [
   {
-    title: 'Surgeries & Operations',
-    discount: 'Up to 60%–75% Covered',
-    icon: Activity,
-    examples: 'Gallbladder, Appendix, Hernia, Piles, Hydrocele, C-Section, Knee, Kidney Stone',
-  },
-  {
-    title: 'ICU & Hospital Room Rent',
-    discount: '50%–60% Bed Subsidy',
-    icon: Building2,
-    examples: 'ICU, CCU, HDU, Deluxe Rooms, General Wards across 120+ empanelled hospitals',
-  },
-  {
-    title: 'NABL Labs & Diagnostics',
-    discount: 'Flat 50% OFF',
+    title: "Metrogram Pathology",
     icon: Microscope,
-    examples: 'MRI, CT Scan, Ultrasound, Digital X-Ray, Full Body 68 Tests, Blood Profiles',
+    badge: "Clinical Laboratory",
+    examples:
+      "Hematology, Biochemistry, Lipid Profile, Liver & Kidney Function Panels, Hormonal & Thyroid Assays, Blood Glucose, Complete Urine Routine",
+    description:
+      "High-precision diagnostic testing utilizing automated NABL-certified analyzers. Delivers accurate cellular, biochemical, and immunological profiling for early disease identification, organ function tracking, and routine clinical monitoring.",
   },
   {
-    title: 'Doctor OPD Consultations',
-    discount: 'Flat 50% OFF + Free Vouchers',
-    icon: Stethoscope,
-    examples: 'Physicians, Cardiologists, Gynecologists, Orthopedic & Pediatric specialists',
+    title: "Blood Specimen Collection",
+    icon: FlaskConical,
+    badge: "Specimen Management Protocol",
+    examples:
+      "Processing, Importance, Procedure: Sterile vacuum venipuncture, centrifuge separation, temperature-controlled chain",
+    description:
+      "A systematic clinical standard ensuring diagnostic accuracy through precise pre-analytical handling, aseptic collection, and automated specimen separation.",
+    details: {
+      importance:
+        "The cornerstone of medical diagnosis. Proper specimen integrity prevents hemolysis and pre-analytical variance, enabling clinicians to detect metabolic, infectious, and systemic disorders with high diagnostic reliability.",
+      procedure:
+        "Conducted via sterile aseptic venipuncture by trained phlebotomists using vacuum collection tubes (EDTA, Serum Separator Gel, Sodium Citrate) with barcode verification and precise multi-inversion mixing.",
+      processing:
+        "Immediate temperature-monitored handling, calibrated centrifugation for serum/plasma separation, and rapid dispatch to automated hematology and biochemistry analyzers.",
+    },
   },
   {
-    title: 'Medicines & Pharmacy',
-    discount: '15%–30% On Hospital Medicines',
-    icon: Pill,
-    examples: 'Direct discount on in-patient pharmacy bills and regular chronic medications',
+    title: "Radiology: CT Scan, MRI & Ultrasound",
+    icon: Scan,
+    badge: "Diagnostic Medical Imaging",
+    examples:
+      "Multi-Slice CT Scan (Chest, Abdomen, Brain), High-Field MRI (Brain, Spine, Joints), HD 3D/4D Ultrasound & Color Doppler",
+    description:
+      "Comprehensive diagnostic radiology offering non-invasive internal visualization with cutting-edge medical imaging modalities.",
+    details: {
+      ctScan:
+        "Multi-slice Computed Tomography delivering cross-sectional imaging for acute trauma, chest pathologies, abdominal organs, and cranial diagnostics.",
+      mri:
+        "High-contrast Magnetic Resonance Imaging for brain, neuro-vascular structures, spine disc alignment, and musculoskeletal joints with zero ionizing radiation.",
+      ultrasound:
+        "High-definition sonography and color Doppler for whole abdomen scans, pelvic evaluations, obstetrics, vascular blood flow, and soft-tissue diagnostics.",
+    },
   },
   {
-    title: 'Emergency ICU Ambulance',
-    discount: 'Subsidy & Rapid Dispatch',
-    icon: Ambulance,
-    examples: 'ACLS ventilators & oxygen ambulances with GPS priority hospital escort',
+    title: "Diagnostic Psychography",
+    icon: Brain,
+    badge: "Cognitive & Mental Diagnostics",
+    examples:
+      "Comprehensive Cognitive Profiling, Mental Health Diagnostics, Behavioral Indices, Stress & Neurological Screenings",
+    description:
+      "Structured diagnostic psychography evaluations and neuro-cognitive assessments designed to map psychological tendencies, cognitive faculties, emotional well-being, and behavioral markers for holistic clinical care.",
   },
 ];
 
@@ -379,169 +241,187 @@ interface PartnerHospital {
 
 const EMPANELLED_HOSPITALS: PartnerHospital[] = [
   {
-    name: 'Metrogram Heart & Multispecialty Hospital',
-    city: 'Patna',
-    type: 'Super Specialty Network Hospital',
-    beds: '150 Beds (35 ICU)',
-    specialties: ['Cardiology', 'Orthopedics', 'Laparoscopy', 'ICU Care'],
-    address: 'Bailey Road / Exhibition Road Hub, Patna',
-    rating: '4.9 ★',
+    name: "Metrogram Heart & Multispecialty Hospital",
+    city: "Patna",
+    type: "Super Specialty Network Hospital",
+    beds: "150 Beds (35 ICU)",
+    specialties: ["Pathology", "Radiology (CT/MRI/USG)", "Psychography", "Cardiology"],
+    address: "Bailey Road / Exhibition Road Hub, Patna",
+    rating: "4.9 ★",
   },
   {
-    name: 'Paras HMRI Empanelled Care Wing',
-    city: 'Patna',
-    type: 'Empanelled Tier-1 Partner',
-    beds: '350 Beds (80 ICU)',
-    specialties: ['Neurosurgery', 'Cardiac Care', 'Oncology', 'Organ Care'],
-    address: 'Raja Bazar, Bailey Road, Patna',
-    rating: '4.8 ★',
+    name: "Paras HMRI Empanelled Care Wing",
+    city: "Patna",
+    type: "Empanelled Tier-1 Partner",
+    beds: "350 Beds (80 ICU)",
+    specialties: ["Radiology", "Pathology", "Neurosurgery", "Diagnostic Scans"],
+    address: "Raja Bazar, Bailey Road, Patna",
+    rating: "4.8 ★",
   },
   {
-    name: 'Mithila Metro Multi-Care Hospital',
-    city: 'Muzaffarpur',
-    type: 'Regional Super Specialty',
-    beds: '120 Beds (25 ICU)',
-    specialties: ['Maternity & Gynaec', 'General Surgery', 'Trauma & Ortho'],
-    address: 'Club Road, Mithanpura, Muzaffarpur',
-    rating: '4.9 ★',
+    name: "Mithila Metro Multi-Care Hospital",
+    city: "Muzaffarpur",
+    type: "Regional Super Specialty",
+    beds: "120 Beds (25 ICU)",
+    specialties: ["Pathology Lab", "Radiology (CT/USG)", "General Diagnostics"],
+    address: "Club Road, Mithanpura, Muzaffarpur",
+    rating: "4.9 ★",
   },
   {
-    name: 'Magadh Metrogram Advanced Hospital',
-    city: 'Gaya',
-    type: 'Empanelled Network Hub',
-    beds: '90 Beds (18 ICU)',
-    specialties: ['General Surgery', 'Urology', 'Internal Medicine', 'Dialysis'],
-    address: 'Station Road, AP Colony, Gaya',
-    rating: '4.8 ★',
+    name: "Magadh Metrogram Advanced Hospital",
+    city: "Gaya",
+    type: "Empanelled Network Hub",
+    beds: "90 Beds (18 ICU)",
+    specialties: [
+      "Pathology Suite",
+      "Radiology CT Scan",
+      "Psychography",
+      "Internal Medicine",
+    ],
+    address: "Station Road, AP Colony, Gaya",
+    rating: "4.8 ★",
   },
   {
-    name: 'Anga Metrogram Surgical Center',
-    city: 'Bhagalpur',
-    type: 'Surgical & Maternity Hub',
-    beds: '80 Beds (15 ICU)',
-    specialties: ['Laparoscopic Surgery', 'Normal/C-Sec Delivery', 'Pediatrics'],
-    address: 'Tilkamanjhi Zero Mile, Bhagalpur',
-    rating: '4.8 ★',
+    name: "Anga Metrogram Diagnostic & Surgical Center",
+    city: "Bhagalpur",
+    type: "Diagnostic & Surgical Hub",
+    beds: "80 Beds (15 ICU)",
+    specialties: [
+      "Pathology Lab",
+      "Ultrasound & CT",
+      "Psychography",
+      "Pediatrics",
+    ],
+    address: "Tilkamanjhi Zero Mile, Bhagalpur",
+    rating: "4.8 ★",
   },
   {
-    name: 'Darbhanga Metro Health City',
-    city: 'Darbhanga',
-    type: 'Mithilanchal Referral Hospital',
-    beds: '110 Beds (20 ICU)',
-    specialties: ['Orthopedic Spine', 'Cardiac ICU', 'Urology Stones', 'Dialysis'],
-    address: 'Laheriasarai Main Road, Darbhanga',
-    rating: '4.9 ★',
+    name: "Darbhanga Metro Health City",
+    city: "Darbhanga",
+    type: "Mithilanchal Referral Hospital",
+    beds: "110 Beds (20 ICU)",
+    specialties: [
+      "MRI & CT Scan",
+      "Pathology Diagnostics",
+      "Psychography Profiling",
+      "Dialysis",
+    ],
+    address: "Laheriasarai Main Road, Darbhanga",
+    rating: "4.9 ★",
   },
   {
-    name: 'Kosi-Seemanchal Metro Hospital',
-    city: 'Purnia',
-    type: 'Regional Partner Hospital',
-    beds: '75 Beds (12 ICU)',
-    specialties: ['Critical Care', 'General Surgery', 'Maternity Care'],
-    address: 'Line Bazar Medical Hub, Purnia',
-    rating: '4.7 ★',
+    name: "Kosi-Seemanchal Metro Hospital",
+    city: "Purnia",
+    type: "Regional Partner Hospital",
+    beds: "75 Beds (12 ICU)",
+    specialties: ["Pathology Lab", "Ultrasound Sonography", "Critical Care"],
+    address: "Line Bazar Medical Hub, Purnia",
+    rating: "4.7 ★",
   },
   {
-    name: 'Begusarai Metro Specialty Hospital',
-    city: 'Begusarai',
-    type: 'Industrial Hub Partner Hospital',
-    beds: '65 Beds (10 ICU)',
-    specialties: ['Trauma Care', 'Laparoscopy', 'ICU Medicine'],
-    address: 'Harhar Mahadev Chowk, Begusarai',
-    rating: '4.8 ★',
+    name: "Begusarai Metro Specialty Hospital",
+    city: "Begusarai",
+    type: "Industrial Hub Partner Hospital",
+    beds: "65 Beds (10 ICU)",
+    specialties: ["Radiology CT/USG", "Pathology Diagnostics", "Psychography"],
+    address: "Harhar Mahadev Chowk, Begusarai",
+    rating: "4.8 ★",
   },
 ];
 
 // Direct Comparison Matrix: Metrogram Card vs Health Insurance vs Ayushman Card
 const COMPARISON_ROWS = [
   {
-    feature: 'Pre-Existing Diseases (BP, Sugar, Thyroid)',
-    metrogramCard: 'Covered from Day 1 (No Waiting)',
-    insurance: '2 to 4 Years Waiting Period',
-    ayushman: 'Covered only if BPL/SECC listed',
+    feature: "Diagnostic Scope (Pathology, CT, MRI, USG, Psychography)",
+    metrogramCard: "All Covered with Instant Discounts",
+    insurance: "Rarely covered (Hospitalization only)",
+    ayushman: "Limited to inpatient admissions only",
   },
   {
-    feature: 'Age Limit & Senior Citizen Entry',
-    metrogramCard: 'No Age Cap (Elderly 60–90+ covered)',
-    insurance: 'High premiums or medical rejection',
-    ayushman: 'Requires government list eligibility',
+    feature: "Blood Specimen Collection & Home Diagnostics",
+    metrogramCard: "Standardized Collection & Discounted Processing",
+    insurance: "Not Covered out-of-pocket",
+    ayushman: "Not Available outside government center",
   },
   {
-    feature: 'Claim Process & Paperwork',
-    metrogramCard: 'Instant On-Counter Deduction (Zero Claims)',
-    insurance: 'Lengthy 30–60 day paperwork & rejections',
-    ayushman: 'Biometric card validation required',
+    feature: "Annual Membership Cost for 1 Full Year",
+    metrogramCard: "Just ₹100 / year (Fixed One Card)",
+    insurance: "₹22,000 – ₹45,000+ / year",
+    ayushman: "Free (Govt. sponsored for eligible BPL only)",
   },
   {
-    feature: 'Annual Membership Cost for 4 Members',
-    metrogramCard: 'Just ₹200 / year (Fixed)',
-    insurance: '₹22,000 – ₹45,000+ / year',
-    ayushman: 'Free (Govt. sponsored for eligible BPL)',
+    feature: "Claim Process & Paperwork",
+    metrogramCard: "Instant On-Counter Deduction (Zero Claims)",
+    insurance: "Lengthy 30–60 day paperwork & rejections",
+    ayushman: "Biometric card validation required",
   },
   {
-    feature: 'OPD Doctor Consultations & Diagnostics',
-    metrogramCard: 'Flat 50% OFF across all tests & OPD',
-    insurance: 'Rarely covered (Only IPD hospital stay)',
-    ayushman: 'Limited to hospital admission only',
+    feature: "Pre-Existing Conditions & Age Cap",
+    metrogramCard: "Day 1 Coverage & No Age Cap",
+    insurance: "2 to 4 Years Waiting Period",
+    ayushman: "Requires government list eligibility",
   },
   {
-    feature: 'Rejection Rate at Hospital Counter',
-    metrogramCard: '0% Rejection at 120+ Partner Hospitals',
-    insurance: '15%–30% claims disputed or cut',
-    ayushman: 'Subject to hospital package quotas',
+    feature: "Rejection Rate at Diagnostic / Billing Counter",
+    metrogramCard: "0% Rejection at 120+ Partner Centers",
+    insurance: "15%–30% claims disputed or cut",
+    ayushman: "Subject to package quotas",
   },
 ];
 
 // Leadership & Advisory Team
 const LEADERSHIP_TEAM = [
   {
-    name: 'Dr. Anand Kishore Sinha, MD',
-    role: 'Chief Medical Officer & Co-Founder',
-    qualification: 'MD (Internal Medicine) • Ex-Senior Consultant AIIMS & PMCH',
-    bio: 'Over 22 years of clinical leadership in Bihar. Architect of Metrogram’s hospital empanelment quality benchmarks and transparent tariff standards.',
-    image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&auto=format&fit=crop&q=80',
+    name: "Dr. Anand Kishore Sinha, MD",
+    role: "Chief Medical Officer & Co-Founder",
+    qualification: "MD (Internal Medicine) • Ex-Senior Consultant AIIMS & PMCH",
+    bio: "Over 22 years of clinical leadership in Bihar. Architect of Metrogram’s diagnostic empanelment standards across Pathology, Radiology, and Psychography.",
+    image:
+      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300&auto=format&fit=crop&q=80",
   },
   {
-    name: 'Prashant Verma',
-    role: 'Managing Director & Promoter',
-    qualification: 'B.Tech (IIT), MBA • Healthcare Financing Pioneer',
-    bio: '14+ years scaling healthcare access for middle-class and rural families. Leading Metrogram’s mission to make quality private hospital care affordable for all.',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+    name: "Prashant Verma",
+    role: "Managing Director & Promoter",
+    qualification: "B.Tech (IIT), MBA • Healthcare Financing Pioneer",
+    bio: "14+ years scaling healthcare access for middle-class and rural families. Leading Metrogram’s mission to make quality diagnostic and hospital care accessible for just ₹100/year.",
+    image:
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80",
   },
   {
-    name: 'Dr. Meenakshi Kumari, MS',
-    role: 'Head of Hospital Empanelment & Surgical Quality',
-    qualification: 'MS (General Surgery), Fellowship in Critical Care',
-    bio: 'Oversees surgical audit, on-counter discount compliance, and 24/7 patient bedside advocacy across our 120+ empanelled hospital partners in Bihar.',
-    image: 'https://images.unsplash.com/photo-1594824813515-99d98cf77f48?w=300&auto=format&fit=crop&q=80',
+    name: "Dr. Meenakshi Kumari, MS",
+    role: "Head of Clinical Diagnostics & Quality Audit",
+    qualification: "MS, Fellowship in Diagnostic & Critical Care Quality",
+    bio: "Oversees lab protocols, standardized blood specimen collection procedures, imaging calibrations, and diagnostic discount compliance across 120+ empanelled centers in Bihar.",
+    image:
+      "https://images.unsplash.com/photo-1594824813515-99d98cf77f48?w=300&auto=format&fit=crop&q=80",
   },
 ];
 
 // Metrogram Card FAQs
 const FAQ_ITEMS = [
   {
-    q: 'What is the Metrogram Health Card and how does it work at hospitals?',
-    a: 'Metrogram is a dedicated Healthcare Membership Card (similar to the Ayushman Card for private hospitals). When you or any covered family member visits an empanelled hospital for surgery, hospitalization, ICU, or OPD/lab tests, you simply show your Metrogram Card QR code at the billing counter. The hospital automatically covers/discounts up to 50% to 75% of your bill directly on the spot.',
+    q: "What services does Metrogram offer?",
+    a: "Metrogram exclusively offers Pathology (including specialized Blood Specimen Collection: Processing, Importance, and Procedure), Radiology (High-resolution CT Scan, MRI, and 3D/4D Ultrasound), and specialized Diagnostic Psychography cognitive and mental health assessments.",
   },
   {
-    q: 'Do I have to file insurance claim reimbursement forms after hospital discharge?',
-    a: 'No! There is zero reimbursement paperwork or claim filing. Your bill discount is applied directly on the hospital invoice before payment. You only pay the nominal discounted remainder. There are no claim surveyors, medical file submissions, or rejection risks.',
+    q: "How much does the Metrogram Membership Card cost and how long is it valid?",
+    a: "There is only one simple, transparent card: the Metrogram Annual Membership Card for just ₹100 for one full year (365 days of complete validity). There are no hidden fees or tier upgrades.",
   },
   {
-    q: 'Are pre-existing diseases and senior citizens covered?',
-    a: 'Yes, 100%! Unlike commercial health insurance that imposes 2–4 years waiting periods, Metrogram Card covers pre-existing conditions (such as Diabetes, Hypertension, Cardiac ailments, Kidney stones, and Hernias) from Day 1 of card activation. There is also no age limit — elderly parents aged 60–90+ are warmly covered.',
+    q: "What is the importance and procedure for Blood Specimen Collection?",
+    a: "Blood Specimen Collection is the foundation of clinical pathology. The procedure involves sterile vacuum venipuncture by trained phlebotomists using specialized additive tubes. Processing includes temperature-controlled transport, automated centrifuge serum/plasma separation, and rigorous NABL-standard quality testing to ensure diagnostic accuracy.",
   },
   {
-    q: 'How many family members are covered under one Metrogram Card?',
-    a: 'Our Gold Family Card (₹200/yr) covers up to 4 members (Self, Spouse, and 2 Children or Parents). Our Platinum Super Shield (₹300/yr) covers up to 6 members, including elderly in-laws. You receive one primary physical card plus instant digital QR cards for every family member on WhatsApp.',
+    q: "What radiology imaging services are covered under the Metrogram Card?",
+    a: "Metrogram covers multi-slice Computed Tomography (CT Scan), high-field Magnetic Resonance Imaging (MRI), and high-definition Ultrasound (Sonography & Color Doppler) with up to 50% discount at 120+ partner diagnostic centers.",
   },
   {
-    q: 'Which private hospitals and cities in Bihar accept the Metrogram Card?',
-    a: 'The Metrogram Card is actively accepted across 120+ empanelled multi-specialty hospitals, nursing homes, and NABL diagnostic centers in Patna, Muzaffarpur, Gaya, Bhagalpur, Darbhanga, Begusarai, Purnia, Chapra, Ara, and expanding districts.',
+    q: "What is Psychography diagnostic assessment?",
+    a: "Diagnostic psychography is a clinical evaluation of cognitive functions, emotional patterns, behavioral metrics, and mental health indicators, offering systematic profiling for holistic clinical diagnosis.",
   },
   {
-    q: 'What should I do during an emergency hospital admission?',
-    a: 'During any emergency, call our 24x7 Hospital Helpline (+91 91234 56789). Our Care Coordinator will immediately inform the nearest empanelled hospital, pre-authorize your admission under the Metrogram Card quota, and ensure priority zero-wait bed allotment and on-counter bill coverage.',
+    q: "How do I use my Metrogram Card at partner centers?",
+    a: "Simply show your instant digital QR card on WhatsApp or your physical membership card at the registration/billing desk of any of our 120+ empanelled diagnostic centers to receive direct on-the-spot discounted rates.",
   },
 ];
 
@@ -561,34 +441,32 @@ export const LandingPage: React.FC = () => {
   }, []);
 
   const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+    setCurrentSlide(
+      (prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length,
+    );
   };
 
   const handleNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % HERO_SLIDES.length);
   };
 
-  // Savings Calculator State
-  const [selectedCalcProcedure, setSelectedCalcProcedure] = useState<ProcedureSaving>(
-    PROCEDURE_SAVINGS[0]
-  );
-
   // Filter for Empanelled Hospitals by City
-  const [selectedHospitalCity, setSelectedHospitalCity] = useState('ALL');
+  const [selectedHospitalCity, setSelectedHospitalCity] = useState("ALL");
 
   // FAQ Accordion State
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Card Application / Enquiry Modal State
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-  const [selectedPlanForModal, setSelectedPlanForModal] = useState<CardPlan | null>(null);
+  const [selectedPlanForModal, setSelectedPlanForModal] =
+    useState<CardPlan | null>(null);
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    city: 'Patna',
-    plan: 'Metrogram Gold Family Shield (₹200/yr)',
-    familyMembers: '4 Members (Self, Spouse, 2 Kids/Parents)',
-    message: '',
+    name: "",
+    phone: "",
+    city: "Patna",
+    plan: "Metrogram Annual Membership Card (₹100/yr)",
+    familyMembers: "1 Year Membership (₹100)",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittedSuccess, setIsSubmittedSuccess] = useState(false);
@@ -600,6 +478,12 @@ export const LandingPage: React.FC = () => {
         ...prev,
         plan: `${plan.name} (₹${plan.price}/yr)`,
       }));
+    } else {
+      setSelectedPlanForModal(METROGRAM_CARD_PLANS[0]);
+      setFormData((prev) => ({
+        ...prev,
+        plan: "Metrogram Annual Membership Card (₹100/yr)",
+      }));
     }
     setIsSubmittedSuccess(false);
     setIsApplyModalOpen(true);
@@ -608,12 +492,12 @@ export const LandingPage: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.phone.trim()) {
-      toast.error('Please enter your full name and contact phone number.');
+      toast.error("Please enter your full name and contact phone number.");
       return;
     }
 
-    if (formData.phone.replace(/\D/g, '').length < 10) {
-      toast.error('Please provide a valid 10-digit mobile number.');
+    if (formData.phone.replace(/\D/g, "").length < 10) {
+      toast.error("Please provide a valid 10-digit mobile number.");
       return;
     }
 
@@ -621,7 +505,9 @@ export const LandingPage: React.FC = () => {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSubmittedSuccess(true);
-      toast.success('Metrogram Card Application received! Instant Digital Card dispatched to WhatsApp.');
+      toast.success(
+        "Metrogram Card Application received! Instant Digital Card dispatched to WhatsApp.",
+      );
     }, 800);
   };
 
@@ -629,33 +515,103 @@ export const LandingPage: React.FC = () => {
     setIsSubmittedSuccess(false);
     setIsApplyModalOpen(false);
     setFormData({
-      name: '',
-      phone: '',
-      city: 'Patna',
-      plan: 'Metrogram Gold Family Shield (₹200/yr)',
-      familyMembers: '4 Members (Self, Spouse, 2 Kids/Parents)',
-      message: '',
+      name: "",
+      phone: "",
+      city: "Patna",
+      plan: "Metrogram Annual Membership Card (₹100/yr)",
+      familyMembers: "1 Year Membership (₹100)",
+      message: "",
+    });
+  };
+
+  // Career (Phlebo) & Franchise Application State
+  const [isPartnerModalOpen, setIsPartnerModalOpen] = useState(false);
+  const [partnerModalType, setPartnerModalType] = useState<"phlebo" | "franchise">("phlebo");
+  const [partnerFormData, setPartnerFormData] = useState({
+    name: "",
+    phone: "",
+    city: "Patna",
+    roleType: "phlebo" as "phlebo" | "franchise",
+    qualification: "DMLT / BMLT",
+    hasBike: "Yes",
+    experience: "1 - 3 Years",
+    spaceAvailable: "100 - 250 sq.ft",
+    currentBusiness: "Pharmacy / Medical Store",
+    investmentBudget: "₹1 Lakh - ₹3 Lakhs",
+    message: "",
+  });
+  const [isPartnerSubmitting, setIsPartnerSubmitting] = useState(false);
+  const [isPartnerSuccess, setIsPartnerSuccess] = useState(false);
+
+  const handleOpenPartnerModal = (type: "phlebo" | "franchise") => {
+    setPartnerModalType(type);
+    setPartnerFormData((prev) => ({
+      ...prev,
+      roleType: type,
+    }));
+    setIsPartnerSuccess(false);
+    setIsPartnerModalOpen(true);
+  };
+
+  const handlePartnerSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!partnerFormData.name.trim() || !partnerFormData.phone.trim()) {
+      toast.error("Please enter your name and contact phone number.");
+      return;
+    }
+    if (partnerFormData.phone.replace(/\D/g, "").length < 10) {
+      toast.error("Please provide a valid 10-digit mobile number.");
+      return;
+    }
+    setIsPartnerSubmitting(true);
+    setTimeout(() => {
+      setIsPartnerSubmitting(false);
+      setIsPartnerSuccess(true);
+      toast.success(
+        partnerFormData.roleType === "phlebo"
+          ? "Phlebotomist Application submitted successfully! Our team will contact you for verification."
+          : "Franchise Inquiry submitted successfully! Our franchise manager will contact you."
+      );
+    }, 800);
+  };
+
+  const handleResetPartnerModal = () => {
+    setIsPartnerSuccess(false);
+    setIsPartnerModalOpen(false);
+    setPartnerFormData({
+      name: "",
+      phone: "",
+      city: "Patna",
+      roleType: partnerModalType,
+      qualification: "DMLT / BMLT",
+      hasBike: "Yes",
+      experience: "1 - 3 Years",
+      spaceAvailable: "100 - 250 sq.ft",
+      currentBusiness: "Pharmacy / Medical Store",
+      investmentBudget: "₹1 Lakh - ₹3 Lakhs",
+      message: "",
     });
   };
 
   const filteredHospitals = EMPANELLED_HOSPITALS.filter(
-    (h) => selectedHospitalCity === 'ALL' || h.city.toLowerCase() === selectedHospitalCity.toLowerCase()
+    (h) =>
+      selectedHospitalCity === "ALL" ||
+      h.city.toLowerCase() === selectedHospitalCity.toLowerCase(),
   );
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] dark:bg-[#0B0F19] text-[#1E293B] dark:text-[#F1F5F9] font-sans antialiased selection:bg-[#97144D] selection:text-white pb-16 md:pb-0">
-      
       {/* 1. TOP ANNOUNCEMENT & 24/7 HOSPITAL HELPLINE BAR (Axis Burgundy Theme) */}
       <div className="bg-[#97144D] text-white text-xs py-2 px-4 sm:px-6 lg:px-10 xl:px-16 border-b border-[#820d3f] sticky top-0 z-50">
         <div className="w-full flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="font-semibold tracking-wide">
-              METROGRAM HEALTH CARD • BIHAR'S #1 CASHLESS HOSPITAL BILL COVERAGE NETWORK
+              METROGRAM HEALTH CARD • JUST ₹100 FOR 1 FULL YEAR
             </span>
             <span className="hidden lg:inline-block text-white/70">|</span>
             <span className="hidden lg:inline-block text-rose-100">
-              Accepted at 120+ Top Private Hospitals Across Bihar
+              Pathology • Radiology (CT, MRI, Ultrasound) • Psychography
             </span>
           </div>
 
@@ -665,7 +621,7 @@ export const LandingPage: React.FC = () => {
               className="flex items-center gap-1.5 font-bold hover:text-rose-200 transition-colors"
             >
               <PhoneCall className="h-3.5 w-3.5 animate-bounce" />
-              <span>24/7 Admission Helpline: +91 91234 56789</span>
+              <span>24/7 Helpline: +91 91234 56789</span>
             </a>
             <span className="hidden sm:inline-block text-white/50">|</span>
             <a
@@ -695,25 +651,48 @@ export const LandingPage: React.FC = () => {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-semibold text-slate-700 dark:text-slate-300">
-            <a href="#how-it-works" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
+            <a
+              href="#how-it-works"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors"
+            >
               How It Works
             </a>
-            <a href="#plans" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Plans
+            <a
+              href="#plans"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors"
+            >
+              Membership (₹100)
             </a>
-            <a href="#calculator" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Calculator
+            <a
+              href="#services"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors"
+            >
+              Services
             </a>
-            <a href="#coverage" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Treatments
+            <a
+              href="#hospitals"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors"
+            >
+              Partner Centers
             </a>
-            <a href="#hospitals" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Hospitals
+            <a
+              href="#careers"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors flex items-center gap-1"
+            >
+              <span>Careers</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-rose-100 text-[#97144D] dark:bg-rose-950 dark:text-rose-300 font-bold">Phlebo</span>
             </a>
-            <a href="#comparison" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
-              Comparison
+            <a
+              href="#franchise"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors flex items-center gap-1"
+            >
+              <span>Franchise</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold">Partner</span>
             </a>
-            <a href="#faqs" className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors">
+            <a
+              href="#faqs"
+              className="hover:text-[#97144D] dark:hover:text-rose-400 transition-colors"
+            >
               FAQs
             </a>
           </nav>
@@ -724,11 +703,17 @@ export const LandingPage: React.FC = () => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+              onClick={() =>
+                setTheme(resolvedTheme === "dark" ? "light" : "dark")
+              }
               className="rounded-full h-9 w-9 text-slate-600 dark:text-slate-300 hover:text-[#97144D]"
               aria-label="Toggle theme"
             >
-              {resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              {resolvedTheme === "dark" ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
             </Button>
 
             {/* Portal Login */}
@@ -737,12 +722,16 @@ export const LandingPage: React.FC = () => {
                 variant="outline"
                 size="sm"
                 onClick={() =>
-                  navigate(role === 'CUSTOMER' ? '/customer/home' : '/dashboard')
+                  navigate(
+                    role === "CUSTOMER" ? "/customer/home" : "/dashboard",
+                  )
                 }
                 className="hidden sm:inline-flex gap-2 border-slate-300 dark:border-slate-700 font-semibold"
               >
                 <UserCheck className="h-4 w-4 text-[#97144D]" />
-                <span>{role === 'CUSTOMER' ? 'Cardholder Portal' : 'Hospital Desk'}</span>
+                <span>
+                  {role === "CUSTOMER" ? "Cardholder Portal" : "Hospital Desk"}
+                </span>
               </Button>
             ) : (
               <Button
@@ -762,20 +751,22 @@ export const LandingPage: React.FC = () => {
               className="bg-[#97144D] hover:bg-[#820d3f] text-white font-bold px-4 py-2 rounded-lg shadow-sm shadow-[#97144D]/30 transition-all cursor-pointer"
             >
               <CreditCard className="h-4 w-4 mr-1.5" />
-              <span>Apply for Card</span>
+              <span>Get Card • ₹100/yr</span>
             </Button>
           </div>
         </div>
       </header>
 
-      {/* 3. HERO SECTION — HALF-PAGE BANNER CAROUSEL (Matching Hero Mock UI) */}
+      {/* 3. HERO SECTION — HALF-PAGE BANNER CAROUSEL */}
       <section className="relative w-full h-[420px] sm:h-[460px] md:h-[490px] lg:h-[510px] flex items-center overflow-hidden bg-[#0A101D] border-b border-slate-200 dark:border-slate-800 select-none">
         {/* Background Image Carousel with Cross-Fade */}
         {HERO_SLIDES.map((slide, index) => (
           <div
             key={slide.id}
             className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-700 ease-in-out ${
-              index === currentSlide ? 'opacity-100 z-0' : 'opacity-0 pointer-events-none -z-10'
+              index === currentSlide
+                ? "opacity-100 z-0"
+                : "opacity-0 pointer-events-none -z-10"
             }`}
             style={{
               backgroundImage: `url('${slide.bgImage}')`,
@@ -808,8 +799,7 @@ export const LandingPage: React.FC = () => {
           <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
         </button>
 
-
-        {/* Bottom Pagination Dots (Active green pill like mock) */}
+        {/* Bottom Pagination Dots */}
         <div className="absolute bottom-3.5 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-20">
           {HERO_SLIDES.map((_, idx) => (
             <button
@@ -818,137 +808,124 @@ export const LandingPage: React.FC = () => {
               onClick={() => setCurrentSlide(idx)}
               className={`transition-all duration-300 cursor-pointer ${
                 idx === currentSlide
-                  ? 'w-7 sm:w-8 h-2.5 rounded-full bg-emerald-500 shadow-md'
-                  : 'w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white/90'
+                  ? "w-7 sm:w-8 h-2.5 rounded-full bg-emerald-500 shadow-md"
+                  : "w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white/90"
               }`}
-              aria-label={`Slide ${idx + 1}${idx === currentSlide ? ' (Active)' : ''}`}
+              aria-label={`Slide ${idx + 1}${idx === currentSlide ? " (Active)" : ""}`}
             />
           ))}
         </div>
       </section>
 
-      {/* 4. HOW METROGRAM CARD WORKS (4 Simple Steps) */}
-      <section id="how-it-works" className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800">
+      {/* 4. HOW METROGRAM CARD WORKS (3 Simple Steps - 4th step removed) */}
+      <section
+        id="how-it-works"
+        className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="text-center max-w-4xl mx-auto space-y-3 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
               <Activity className="h-3.5 w-3.5" />
-              <span>CASHLESS-LIKE BILL COVERAGE WORKFLOW</span>
+              <span>SEAMLESS DIAGNOSTIC & BILL COVERAGE</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              How Metrogram Covers Your Hospital Bills in 4 Simple Steps
+              How Metrogram Works in 3 Simple Steps
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
               No complicated insurance paperwork, no agent commissions, and zero reimbursement wait times.
             </p>
           </div>
 
-          {/* 4 Steps Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+          {/* 3 Steps Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative max-w-5xl mx-auto">
             {/* Step 1 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all">
+            <div className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all shadow-sm">
               <div className="h-12 w-12 rounded-2xl bg-[#97144D] text-white flex items-center justify-center font-black text-base mb-4 shadow-md shadow-[#97144D]/25">
                 01
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
                 1. Get Your Metrogram Card
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Choose your family plan starting at ₹100/yr. Receive your instant Digital QR Card on WhatsApp in 5 minutes and a physical Smart Card at your address.
+                Activate your 1-year Metrogram Membership Card for just ₹100. Receive your instant Digital QR Card on WhatsApp in 5 minutes and physical card delivered to your home.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all">
+            <div className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all shadow-sm">
               <div className="h-12 w-12 rounded-2xl bg-[#97144D] text-white flex items-center justify-center font-black text-base mb-4 shadow-md shadow-[#97144D]/25">
                 02
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                2. Visit 120+ Partner Hospitals
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                2. Visit 120+ Partner Centers
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Walk into any empanelled multi-specialty hospital, nursing home, or diagnostic center across Patna, Gaya, Muzaffarpur, Bhagalpur, or Darbhanga.
+                Walk into any empanelled multi-specialty hospital or diagnostic center across Bihar for Metrogram Pathology, Radiology (CT scan, MRI, Ultrasound), or Psychography.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all">
+            <div className="p-7 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all shadow-sm">
               <div className="h-12 w-12 rounded-2xl bg-[#97144D] text-white flex items-center justify-center font-black text-base mb-4 shadow-md shadow-[#97144D]/25">
                 03
               </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                3. Flash Card at Billing Counter
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
+                3. Flash Card & Save Instantly
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Show your Metrogram Card QR code at the admission desk. The hospital desk coordinates directly with Metrogram’s hospital helpdesk for pre-authorization.
-              </p>
-            </div>
-
-            {/* Step 4 */}
-            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative group hover:border-[#97144D]/40 transition-all">
-              <div className="h-12 w-12 rounded-2xl bg-[#97144D] text-white flex items-center justify-center font-black text-base mb-4 shadow-md shadow-[#97144D]/25">
-                04
-              </div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">
-                4. Bill Covered on the Spot
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                Up to 50%–75% of your surgery, bed charge, ICU, and medicine bill is deducted directly on the spot. You pay only the small discounted remainder!
+                Show your Metrogram Card QR code at the registration counter to receive instant pre-authorized bill discounts on your pathology tests, diagnostic scans, and psychography evaluations.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. CARD PLANS & PRICING (Core Product Offering) */}
-      <section id="plans" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800">
+      {/* 5. CARD PLANS & PRICING (Single Card for ₹100 for One Year) */}
+      <section
+        id="plans"
+        className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="text-center max-w-4xl mx-auto space-y-3 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
               <CreditCard className="h-3.5 w-3.5" />
-              <span>AFFORDABLE ANNUAL MEMBERSHIP</span>
+              <span>ONE CARD • ONE YEAR • ONE FIXED PRICE</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              Transparent Health Card Plans for Every Family
+              Metrogram Membership Card for 1 Full Year
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-              One annual subscription protects your family from massive surgery and hospital emergency costs across Bihar.
+              One simple, transparent membership card at only ₹100 for 365 days of complete diagnostic coverage.
             </p>
           </div>
 
-          {/* Cards Pricing Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          {/* Single Card Presentation */}
+          <div className="max-w-xl mx-auto">
             {METROGRAM_CARD_PLANS.map((plan) => {
               const savingsPercent = Math.round(
-                ((plan.regularPrice - plan.price) / plan.regularPrice) * 100
+                ((plan.regularPrice - plan.price) / plan.regularPrice) * 100,
               );
 
               return (
                 <div
                   key={plan.id}
-                  className={`bg-white dark:bg-slate-900 rounded-3xl p-7 sm:p-8 flex flex-col justify-between border-2 transition-all shadow-md hover:shadow-xl relative ${
-                    plan.popular
-                      ? 'border-[#97144D] ring-4 ring-[#97144D]/15 dark:border-rose-500'
-                      : 'border-slate-200 dark:border-slate-800'
-                  }`}
+                  className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-10 flex flex-col justify-between border-2 border-[#97144D] ring-4 ring-[#97144D]/15 dark:border-rose-500 shadow-2xl relative"
                 >
                   {/* Top Badge */}
-                  {plan.badge && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#97144D] text-white text-[11px] font-extrabold px-4 py-1 rounded-full shadow-md tracking-wider">
-                      {plan.badge}
-                    </div>
-                  )}
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#97144D] text-white text-[11px] font-extrabold px-5 py-1 rounded-full shadow-md tracking-wider">
+                    {plan.badge}
+                  </div>
 
                   <div>
                     {/* Header */}
-                    <div className="mb-5">
+                    <div className="mb-6 text-center">
                       <span className="text-xs font-bold text-[#97144D] dark:text-rose-400 uppercase tracking-widest block mb-1">
                         {plan.tier}
                       </span>
-                      <h3 className="text-2xl font-black text-slate-900 dark:text-white">
+                      <h3 className="text-3xl font-black text-slate-900 dark:text-white">
                         {plan.name}
                       </h3>
-                      <div className="flex items-center gap-2 mt-1 text-xs text-slate-500 dark:text-slate-400">
+                      <div className="flex items-center justify-center gap-2 mt-2 text-xs text-slate-500 dark:text-slate-400">
                         <Users className="h-3.5 w-3.5 text-[#97144D]" />
                         <span>{plan.membersCount}</span>
                         <span>•</span>
@@ -957,51 +934,64 @@ export const LandingPage: React.FC = () => {
                     </div>
 
                     {/* Price Tag */}
-                    <div className="bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl mb-6 border border-slate-100 dark:border-slate-800">
-                      <div className="flex items-baseline justify-between">
-                        <div>
-                          <span className="text-xs text-slate-400 line-through mr-2">
-                            ₹{plan.regularPrice.toLocaleString()}
-                          </span>
-                          <div className="text-3xl sm:text-4xl font-black text-[#97144D] dark:text-rose-400 inline-block">
-                            ₹{plan.price.toLocaleString()}
-                          </div>
-                          <span className="text-xs text-slate-500 ml-1.5 font-bold">
-                            / year
-                          </span>
+                    <div className="bg-slate-50 dark:bg-slate-800/60 p-6 rounded-2xl mb-6 border border-slate-100 dark:border-slate-800 text-center">
+                      <div className="flex items-baseline justify-center gap-3">
+                        <span className="text-sm text-slate-400 line-through">
+                          ₹{plan.regularPrice.toLocaleString()}
+                        </span>
+                        <div className="text-4xl sm:text-5xl font-black text-[#97144D] dark:text-rose-400 inline-block">
+                          ₹{plan.price.toLocaleString()}
                         </div>
-                        <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-md">
+                        <span className="text-sm text-slate-600 dark:text-slate-300 font-bold">
+                          / year
+                        </span>
+                        <span className="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-md ml-2">
                           {savingsPercent}% OFF
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-2">
-                        Less than ₹1/day to protect your whole family.
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-2">
+                        Just ₹100 for 365 days of complete diagnostic coverage across Bihar.
                       </div>
                     </div>
 
                     {/* Key Highlights */}
                     <div className="grid grid-cols-3 gap-2 text-center mb-6 text-xs">
-                      <div className="p-2.5 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40">
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Surgery</div>
-                        <div className="font-extrabold text-[#97144D] dark:text-rose-300">{plan.surgeryCoverage}</div>
+                      <div className="p-3 rounded-xl bg-rose-50/60 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40">
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                          Pathology
+                        </div>
+                        <div className="font-extrabold text-[#97144D] dark:text-rose-300">
+                          {plan.surgeryCoverage}
+                        </div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-slate-100/70 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400">ICU Bed</div>
-                        <div className="font-bold text-slate-800 dark:text-slate-200">{plan.icuCoverage}</div>
+                      <div className="p-3 rounded-xl bg-slate-100/70 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                          Radiology
+                        </div>
+                        <div className="font-bold text-slate-800 dark:text-slate-200">
+                          {plan.icuCoverage}
+                        </div>
                       </div>
-                      <div className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
-                        <div className="text-[10px] text-slate-500 dark:text-slate-400">Labs & OPD</div>
-                        <div className="font-bold text-emerald-700 dark:text-emerald-300">{plan.opdLabDiscount}</div>
+                      <div className="p-3 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
+                        <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                          Psychography
+                        </div>
+                        <div className="font-bold text-emerald-700 dark:text-emerald-300">
+                          {plan.opdLabDiscount}
+                        </div>
                       </div>
                     </div>
 
                     {/* Features Checklist */}
                     <div className="space-y-3 mb-8">
                       <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                        Coverage & Benefits:
+                        Included Card Benefits:
                       </div>
                       {plan.features.map((feat, fIdx) => (
-                        <div key={fIdx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300">
+                        <div
+                          key={fIdx}
+                          className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300"
+                        >
                           <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                           <span>{feat}</span>
                         </div>
@@ -1010,27 +1000,23 @@ export const LandingPage: React.FC = () => {
                   </div>
 
                   {/* Actions */}
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
                     <Button
                       size="lg"
                       onClick={() => handleOpenApplyModal(plan)}
-                      className={`w-full font-bold text-sm h-12 rounded-xl cursor-pointer ${
-                        plan.popular
-                          ? 'bg-[#97144D] hover:bg-[#820d3f] text-white shadow-lg shadow-[#97144D]/30'
-                          : 'bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-800 dark:hover:bg-slate-700'
-                      }`}
+                      className="w-full font-bold text-sm h-12 rounded-xl cursor-pointer bg-[#97144D] hover:bg-[#820d3f] text-white shadow-lg shadow-[#97144D]/30"
                     >
                       <CreditCard className="h-4 w-4 mr-2" />
-                      <span>Apply for {plan.name.split(' ')[1]}</span>
+                      <span>Apply for Metrogram Card (₹100/yr)</span>
                     </Button>
                     <a
-                      href={`https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20want%20to%20activate:%20${encodeURIComponent(plan.name)}`}
+                      href={`https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20want%20to%20activate%20the%20Metrogram%20Membership%20Card%20for%20Rs%20100`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full inline-flex items-center justify-center text-xs font-bold py-2 text-emerald-700 dark:text-emerald-300 hover:underline"
                     >
                       <MessageSquare className="h-3.5 w-3.5 mr-1" />
-                      Chat with Card Specialist
+                      Chat with Card Specialist on WhatsApp
                     </a>
                   </div>
                 </div>
@@ -1040,219 +1026,230 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 6. INTERACTIVE HOSPITAL SAVINGS CALCULATOR */}
-      <section id="calculator" className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800">
-        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
-          <div className="text-center max-w-4xl mx-auto space-y-3 mb-14">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
-              <Calculator className="h-3.5 w-3.5" />
-              <span>HOSPITAL BILL SAVINGS ESTIMATOR</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              See How Much You Save on Major Hospital Surgeries
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-              Select any medical procedure below to see real market hospital rates vs your bill with a Metrogram Health Card.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
-            {/* Left 6 cols: Select Procedure Tabs */}
-            <div className="lg:col-span-6 space-y-2.5">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">
-                Select Common Medical Procedure in Bihar:
-              </div>
-              {PROCEDURE_SAVINGS.slice(0, 6).map((proc) => {
-                const isSelected = selectedCalcProcedure.id === proc.id;
-                return (
-                  <button
-                    key={proc.id}
-                    type="button"
-                    onClick={() => setSelectedCalcProcedure(proc)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                      isSelected
-                        ? 'bg-[#97144D] text-white border-[#97144D] shadow-lg shadow-[#97144D]/20'
-                        : 'bg-slate-50 dark:bg-slate-900/80 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40'
-                    }`}
-                  >
-                    <div>
-                      <span
-                        className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm ${
-                          isSelected
-                            ? 'bg-white/20 text-white'
-                            : 'bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300'
-                        }`}
-                      >
-                        {proc.category}
-                      </span>
-                      <div className="font-bold text-sm mt-1">{proc.procedure}</div>
-                    </div>
-                    <div className="text-right shrink-0 ml-3">
-                      <div className={`text-xs ${isSelected ? 'text-rose-200' : 'text-slate-400'}`}>
-                        Save ₹{proc.savingsAmount.toLocaleString()}
-                      </div>
-                      <div className="text-xs font-black">
-                        {proc.coveragePercent}% Covered
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Right 6 cols: Visual Savings Comparison Card */}
-            <div className="lg:col-span-6 bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 text-white rounded-3xl p-7 sm:p-9 border-2 border-[#97144D]/40 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 -mr-16 -mt-16 w-56 h-56 rounded-full bg-[#97144D]/25 blur-3xl pointer-events-none" />
-
-              <div className="flex items-center justify-between pb-4 border-b border-white/10">
-                <span className="text-xs font-bold text-amber-300 uppercase tracking-wider">
-                  Live Bill Comparison
-                </span>
-                <span className="text-xs bg-emerald-500/20 text-emerald-300 font-extrabold px-3 py-0.5 rounded-full border border-emerald-500/40">
-                  {selectedCalcProcedure.coveragePercent}% Cost Covered
-                </span>
-              </div>
-
-              <div className="my-6 space-y-4">
-                <h3 className="text-2xl font-black text-white">
-                  {selectedCalcProcedure.procedure}
-                </h3>
-
-                <div className="grid grid-cols-2 gap-4 pt-2">
-                  <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-                    <div className="text-xs text-slate-400">Regular Hospital Bill:</div>
-                    <div className="text-xl sm:text-2xl font-bold text-slate-400 line-through mt-1">
-                      ₹{selectedCalcProcedure.marketBill.toLocaleString()}
-                    </div>
-                    <div className="text-[10px] text-rose-300 mt-1">Without Metrogram Card</div>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40">
-                    <div className="text-xs text-emerald-300 font-bold">You Pay with Card:</div>
-                    <div className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">
-                      ₹{selectedCalcProcedure.metrogramCardBill.toLocaleString()}
-                    </div>
-                    <div className="text-[10px] text-emerald-200 mt-1">Direct On-Counter Rate</div>
-                  </div>
-                </div>
-
-                {/* Big Savings Highlight */}
-                <div className="p-5 rounded-2xl bg-[#97144D]/30 border border-[#97144D]/60 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Wallet className="h-8 w-8 text-amber-300" />
-                    <div>
-                      <div className="text-xs text-rose-200">Total Money Saved in Cash:</div>
-                      <div className="text-2xl sm:text-3xl font-black text-white">
-                        ₹{selectedCalcProcedure.savingsAmount.toLocaleString()}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs font-extrabold text-amber-300">
-                      {selectedCalcProcedure.coveragePercent}%
-                    </div>
-                    <div className="text-[10px] text-slate-300">Bill Covered</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="pt-2 flex flex-col sm:flex-row gap-3">
-                <Button
-                  onClick={() => handleOpenApplyModal()}
-                  className="flex-1 bg-[#97144D] hover:bg-[#820d3f] text-white font-bold h-12 rounded-xl cursor-pointer"
-                >
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  <span>Get Card & Claim These Savings</span>
-                </Button>
-                <a
-                  href={`https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20want%20to%20know%20the%20discounted%20rate%20for:%20${encodeURIComponent(selectedCalcProcedure.procedure)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center px-4 py-3 rounded-xl border border-white/20 text-xs font-bold text-white hover:bg-white/10 transition-colors"
-                >
-                  <MessageSquare className="h-4 w-4 mr-1 text-emerald-400" />
-                  Hospital Quote
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. WHAT MEDICAL TREATMENTS & PROCEDURES ARE COVERED */}
-      <section id="coverage" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800">
+      {/* 6. WHAT SERVICES METROGRAM OFFERS EXCLUSIVELY */}
+      <section
+        id="services"
+        className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="text-center max-w-4xl mx-auto space-y-3 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>COMPREHENSIVE MEDICAL SCOPE</span>
+              <span>METROGRAM EXCLUSIVE SERVICES</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              All Major Treatments & Hospital Needs Covered
+              Our Core Diagnostic Services
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-              From routine doctor consults and blood tests to advanced laparoscopic surgeries and ICU admissions.
+              Metrogram exclusively provides specialized Pathology, advanced Radiology (CT Scan, MRI, Ultrasound), and Diagnostic Psychography.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {COVERED_CATEGORIES.map((cat, i) => {
-              const Icon = cat.icon;
-              return (
-                <div
-                  key={i}
-                  className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40 transition-all shadow-sm"
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="h-12 w-12 rounded-xl bg-rose-50 dark:bg-rose-950/40 text-[#97144D] dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/30">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <span className="text-xs font-extrabold text-[#97144D] dark:text-rose-300 bg-[#97144D]/10 px-2.5 py-1 rounded-full border border-[#97144D]/20">
-                      {cat.discount}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* 1. Metrogram Pathology */}
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40 transition-all shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-14 w-14 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-[#97144D] dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/30">
+                    <Microscope className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-[#97144D] dark:text-rose-300 bg-[#97144D]/10 px-3 py-1 rounded-full border border-[#97144D]/20">
+                    NABL Standard Testing
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Metrogram Pathology
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  High-precision diagnostic testing utilizing automated NABL-certified analyzers. Delivers accurate cellular, biochemical, and immunological profiling for early disease identification, organ monitoring, and routine health checks.
+                </p>
+                <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Complete Blood Counts (CBC), Hemogram, & Erythrocyte Indices</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Liver Function (LFT), Kidney Function (KFT), & Lipid Profiling</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Thyroid Hormone Assays (T3, T4, TSH) & Glycated Hemoglobin (HbA1c)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. Blood Specimen Collection */}
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40 transition-all shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-14 w-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-100 dark:border-amber-900/30">
+                    <FlaskConical className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950/60 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800">
+                    Clinical Phlebotomy
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Blood Specimen Collection
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Standardized pre-analytical blood collection protocol guaranteeing accurate laboratory results:
+                </p>
+                <div className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <strong className="text-slate-900 dark:text-white font-bold block text-[11px] mb-0.5">
+                      Importance:
+                    </strong>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      Essential foundation for diagnostic accuracy. Proper collection prevents specimen hemolysis and pre-analytical variances, ensuring medical interventions are guided by true biochemical baselines.
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">
-                    {cat.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                    <strong>Includes:</strong> {cat.examples}
-                  </p>
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <strong className="text-slate-900 dark:text-white font-bold block text-[11px] mb-0.5">
+                      Procedure:
+                    </strong>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      Sterile aseptic venipuncture performed by trained phlebotomists using specialized color-coded vacuum tubes (EDTA, Serum Gel, Sodium Citrate) with barcode verification and proper tube inversion.
+                    </span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <strong className="text-slate-900 dark:text-white font-bold block text-[11px] mb-0.5">
+                      Processing:
+                    </strong>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      Controlled temperature maintenance, standardized centrifugation for plasma/serum separation, automated sample pipetting, and prompt analytical evaluation.
+                    </span>
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            </div>
+
+            {/* 3. Radiology: CT Scan, MRI & Ultrasound */}
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40 transition-all shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-14 w-14 rounded-2xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-900/30">
+                    <Scan className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-950/60 px-3 py-1 rounded-full border border-blue-200 dark:border-blue-800">
+                    Advanced Imaging
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Radiology: CT Scan, MRI & Ultrasound
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Advanced high-resolution diagnostic imaging modalities delivering non-invasive internal anatomical clarity:
+                </p>
+                <div className="space-y-2.5 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+                  <div className="flex items-start gap-2">
+                    <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-300 font-bold shrink-0 text-[10px]">
+                      CT SCAN
+                    </span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      Multi-slice Computed Tomography for high-speed cross-sectional examination of the brain, chest, abdomen, pelvis, and trauma bone mapping.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-950 text-purple-800 dark:text-purple-300 font-bold shrink-0 text-[10px]">
+                      MRI SCAN
+                    </span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      High-field Magnetic Resonance Imaging for detailed soft-tissue visualization of the brain, spinal column, ligaments, joints, and neurovascular pathways.
+                    </span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold shrink-0 text-[10px]">
+                      ULTRASOUND
+                    </span>
+                    <span className="text-slate-600 dark:text-slate-300">
+                      HD 3D/4D Sonography and Color Doppler for whole abdomen, pelvic, obstetrics, carotid/arterial blood flow, and soft-tissue evaluation.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 4. Diagnostic Psychography */}
+            <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-[#97144D]/40 transition-all shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="h-14 w-14 rounded-2xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 flex items-center justify-center border border-purple-100 dark:border-purple-900/30">
+                    <Brain className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-950/60 px-3 py-1 rounded-full border border-purple-200 dark:border-purple-800">
+                    Cognitive Assessment
+                  </span>
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Diagnostic Psychography
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Specialized diagnostic psychography evaluations, neuro-cognitive mapping, and clinical mental health screenings. Providing structured evaluations to map psychological patterns, cognitive functions, and emotional wellness.
+                </p>
+                <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Systematic Psychographic Behavioral & Cognitive Profiling</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Mental Health Diagnostic Screening & Stress Marker Profiling</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>Neuro-psychological Baseline Testing for Clinical Decision Making</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 8. 120+ EMPANELLED HOSPITALS NETWORK ACROSS BIHAR */}
-      <section id="hospitals" className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800">
+      {/* 8. 120+ EMPANELLED HOSPITALS & DIAGNOSTIC NETWORK ACROSS BIHAR */}
+      <section
+        id="hospitals"
+        className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="text-center max-w-4xl mx-auto space-y-3 mb-12">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
               <Building2 className="h-3.5 w-3.5" />
-              <span>BIHAR HOSPITAL NETWORK</span>
+              <span>BIHAR NETWORK</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-              120+ Leading Empanelled Hospitals & Diagnostic Hubs
+              120+ Empanelled Diagnostic & Hospital Hubs
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-              Show your Metrogram Card at any of these verified private hospitals across Bihar for instant on-counter bill discounts.
+              Show your Metrogram Card at any of these verified diagnostic partner centers across Bihar for instant discounts.
             </p>
 
             {/* City Filter Pills */}
             <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
-              {['ALL', 'Patna', 'Muzaffarpur', 'Gaya', 'Bhagalpur', 'Darbhanga', 'Begusarai', 'Purnia'].map((city) => (
+              {[
+                "ALL",
+                "Patna",
+                "Muzaffarpur",
+                "Gaya",
+                "Bhagalpur",
+                "Darbhanga",
+                "Begusarai",
+                "Purnia",
+              ].map((city) => (
                 <button
                   key={city}
                   type="button"
                   onClick={() => setSelectedHospitalCity(city)}
                   className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                     selectedHospitalCity === city
-                      ? 'bg-[#97144D] text-white shadow-sm shadow-[#97144D]/30'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                      ? "bg-[#97144D] text-white shadow-sm shadow-[#97144D]/30"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700"
                   }`}
                 >
-                  {city === 'ALL' ? 'All Bihar Districts' : city}
+                  {city === "ALL" ? "All Bihar Districts" : city}
                 </button>
               ))}
             </div>
@@ -1270,13 +1267,17 @@ export const LandingPage: React.FC = () => {
                     <span className="text-[11px] font-bold text-[#97144D] dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-sm border border-rose-100 dark:border-rose-900/40">
                       {hosp.city}
                     </span>
-                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400">{hosp.rating}</span>
+                    <span className="text-xs font-bold text-amber-600 dark:text-amber-400">
+                      {hosp.rating}
+                    </span>
                   </div>
 
                   <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug mb-1">
                     {hosp.name}
                   </h3>
-                  <div className="text-xs text-slate-500 mb-3">{hosp.type} • {hosp.beds}</div>
+                  <div className="text-xs text-slate-500 mb-3">
+                    {hosp.type} • {hosp.beds}
+                  </div>
 
                   <div className="space-y-1.5 mb-4">
                     <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
@@ -1311,7 +1312,7 @@ export const LandingPage: React.FC = () => {
                     onClick={() => handleOpenApplyModal()}
                     className="text-xs font-bold h-8 border-slate-300 dark:border-slate-700"
                   >
-                    Admission Desk
+                    Partner Desk
                   </Button>
                 </div>
               </div>
@@ -1320,21 +1321,24 @@ export const LandingPage: React.FC = () => {
 
           <div className="mt-10 text-center">
             <p className="text-xs text-slate-500 mb-3">
-              Need admission assistance at a hospital not listed here? Our 24/7 care managers coordinate direct cashless discounts across 50+ additional empanelled nursing centers.
+              Need assistance booking a CT scan, MRI, Ultrasound, or Pathology test? Our 24/7 care managers assist with appointment slots across 50+ additional empanelled centers.
             </p>
             <a
               href="tel:+919123456789"
               className="inline-flex items-center gap-2 text-xs font-bold text-[#97144D] dark:text-rose-400 hover:underline"
             >
               <Phone className="h-3.5 w-3.5" />
-              <span>Call 24/7 Hospital Admission Desk (+91 91234 56789)</span>
+              <span>Call 24/7 Diagnostic Desk (+91 91234 56789)</span>
             </a>
           </div>
         </div>
       </section>
 
       {/* 9. METROGRAM CARD VS TRADITIONAL HEALTH INSURANCE VS AYUSHMAN */}
-      <section id="comparison" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800">
+      <section
+        id="comparison"
+        className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="text-center max-w-4xl mx-auto space-y-3 mb-16">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
@@ -1345,7 +1349,7 @@ export const LandingPage: React.FC = () => {
               Why Families Prefer Metrogram Card over Health Insurance
             </h2>
             <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
-              No claim rejections, no 4-year waiting periods, and no high insurance premium burdens.
+              Instant diagnostic discounts, no paperwork, and just ₹100 for a full year.
             </p>
           </div>
 
@@ -1369,7 +1373,10 @@ export const LandingPage: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-xs sm:text-sm">
                   {COMPARISON_ROWS.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                    <tr
+                      key={idx}
+                      className="hover:bg-slate-50/50 dark:hover:bg-slate-800/40"
+                    >
                       <td className="p-4 sm:p-5 font-bold text-slate-900 dark:text-white">
                         {row.feature}
                       </td>
@@ -1398,7 +1405,10 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 10. ABOUT US & MEDICAL LEADERSHIP */}
-      <section id="about-us" className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800">
+      <section
+        id="about-us"
+        className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
             {/* Left 6 Columns: Story & Mission */}
@@ -1409,14 +1419,14 @@ export const LandingPage: React.FC = () => {
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                Democratizing Quality Private Hospital Care for Every Family in Bihar
+                Democratizing Quality Diagnostics & Care for Every Family in Bihar
               </h2>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Founded to eliminate catastrophic hospital billing debt for middle-class and working families across Bihar, <strong>Metrogram</strong> creates direct bulk-negotiated partnerships with leading private hospitals and diagnostic labs.
+                Founded to eliminate expensive diagnostic out-of-pocket costs for middle-class and working families across Bihar, <strong>Metrogram</strong> provides direct bulk-negotiated discounts on Pathology, Radiology (CT Scan, MRI, Ultrasound), and Diagnostic Psychography.
               </p>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                By presenting your Metrogram Card, you bypass high out-of-pocket charges and access pre-authorized medical subsidies directly at the hospital billing desk — backed by ethical medical review and 24x7 patient advocacy.
+                By presenting your Metrogram Card, you bypass inflated diagnostic charges and access pre-authorized medical subsidies directly at partner diagnostic counters for just ₹100/year.
               </p>
 
               {/* Quality & Verification Standards */}
@@ -1424,16 +1434,20 @@ export const LandingPage: React.FC = () => {
                 <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <Award className="h-5 w-5 text-[#97144D] shrink-0 mt-0.5" />
                   <div className="text-xs">
-                    <strong className="text-slate-900 dark:text-white block font-bold">120+ Legally Empanelled Hospitals</strong>
-                    Direct signed hospital MoUs ensuring strict compliance with fixed discounted package billing rates.
+                    <strong className="text-slate-900 dark:text-white block font-bold">
+                      120+ Empanelled Diagnostic & Hospital Partners
+                    </strong>
+                    Strict compliance with fixed discounted diagnostic package rates.
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700">
                   <ShieldCheck className="h-5 w-5 text-[#97144D] shrink-0 mt-0.5" />
                   <div className="text-xs">
-                    <strong className="text-slate-900 dark:text-white block font-bold">ISO 9001:2015 Quality Certified & Govt. Registered</strong>
-                    Incorporated healthcare platform compliant with Indian clinical standards, MSME, and Startup India recognition.
+                    <strong className="text-slate-900 dark:text-white block font-bold">
+                      ISO 9001:2015 Quality Certified & Govt. Registered
+                    </strong>
+                    Compliant healthcare platform supporting standardized pathology and radiology clinical diagnostics.
                   </div>
                 </div>
               </div>
@@ -1444,14 +1458,20 @@ export const LandingPage: React.FC = () => {
               <div className="bg-slate-50 dark:bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md">
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center justify-between">
                   <span>Medical Governance & Founders</span>
-                  <Badge variant="outline" className="text-xs text-[#97144D] border-[#97144D]/30">
+                  <Badge
+                    variant="outline"
+                    className="text-xs text-[#97144D] border-[#97144D]/30"
+                  >
                     Clinical Board
                   </Badge>
                 </h3>
 
                 <div className="space-y-5">
                   {LEADERSHIP_TEAM.map((leader, i) => (
-                    <div key={i} className="flex items-start gap-4 pb-4 border-b border-slate-200 dark:border-slate-800 last:border-0 last:pb-0">
+                    <div
+                      key={i}
+                      className="flex items-start gap-4 pb-4 border-b border-slate-200 dark:border-slate-800 last:border-0 last:pb-0"
+                    >
                       <img
                         src={leader.image}
                         alt={leader.name}
@@ -1480,8 +1500,223 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 11. FAQ BLOCK */}
-      <section id="faqs" className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800">
+      {/* 11. CAREERS & FRANCHISE PARTNER OPPORTUNITIES */}
+      <section
+        id="careers"
+        className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800 relative"
+      >
+        {/* Anchor for Franchise */}
+        <div id="franchise" className="absolute -top-24 left-0" />
+
+        <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
+          <div className="text-center max-w-4xl mx-auto space-y-3 mb-16">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
+              <Briefcase className="h-3.5 w-3.5" />
+              <span>CAREERS & BUSINESS FRANCHISE</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+              Grow with Metrogram: Join as a Phlebo or Buy a Franchise
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
+              Be a part of Bihar’s fastest-expanding diagnostic network. Build a high-earning healthcare career or launch your own profitable Diagnostic Collection Center.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* PILLAR 1: JOIN AS A PHLEBOTOMIST (PHLEBO) */}
+            <div className="p-8 sm:p-9 rounded-3xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 hover:border-[#97144D]/50 transition-all shadow-md flex flex-col justify-between relative overflow-hidden group">
+              <div className="absolute top-0 right-0 -mr-12 -mt-12 w-40 h-40 rounded-full bg-[#97144D]/10 blur-2xl pointer-events-none group-hover:bg-[#97144D]/20 transition-all" />
+
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="h-14 w-14 rounded-2xl bg-rose-50 dark:bg-rose-950/50 text-[#97144D] dark:text-rose-400 flex items-center justify-center border border-rose-100 dark:border-rose-900/40">
+                    <Syringe className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-[#97144D] dark:text-rose-300 bg-[#97144D]/10 px-3.5 py-1 rounded-full border border-[#97144D]/20">
+                    Career • Hiring Phlebos
+                  </span>
+                </div>
+
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Join as a Phlebotomist (Phlebo)
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                  Perform sterile doorstep blood specimen collection across homes and clinics in Bihar with flexible shifts, top earnings, and guaranteed supplies.
+                </p>
+
+                <div className="space-y-3.5 mb-8 text-xs sm:text-sm">
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <DollarSign className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        High Per-Sample Earnings & Bonuses:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        Earn attractive per-collection payouts + monthly retainers + performance milestone bonuses.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <FlaskConical className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Free Medical Kit & Cold-Chain Bag:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        High-quality vacutainers, sterile needle sets, tourniquets, PPE, and temperature-monitored sample boxes.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <Truck className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Smart Route & Live Settlement App:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        Automated patient route navigation, digital sample barcode validation, and instant daily payout tracking.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <GraduationCap className="h-4 w-4 text-purple-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Eligibility & Qualifications:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        DMLT / BMLT / GNM / Nursing or Certified Phlebotomist with valid two-wheeler & smartphone.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-3">
+                <Button
+                  type="button"
+                  onClick={() => handleOpenPartnerModal("phlebo")}
+                  className="flex-1 bg-[#97144D] hover:bg-[#820d3f] text-white font-bold h-11 rounded-xl shadow-md shadow-[#97144D]/25 cursor-pointer text-xs"
+                >
+                  <Syringe className="h-4 w-4 mr-2" />
+                  Apply as Phlebotomist
+                </Button>
+                <a
+                  href="https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20want%20to%20join%20as%20a%20Phlebotomist%20(Phlebo)%20in%20Bihar."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <MessageSquare className="h-4 w-4 mr-1.5 text-emerald-600" />
+                  WhatsApp Recruiter
+                </a>
+              </div>
+            </div>
+
+            {/* PILLAR 2: BUY / OWN A METROGRAM FRANCHISE */}
+            <div className="p-8 sm:p-9 rounded-3xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 hover:border-emerald-500/50 transition-all shadow-md flex flex-col justify-between relative overflow-hidden group">
+              <div className="absolute top-0 right-0 -mr-12 -mt-12 w-40 h-40 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none group-hover:bg-emerald-500/20 transition-all" />
+
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="h-14 w-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-100 dark:border-emerald-900/40">
+                    <Store className="h-7 w-7" />
+                  </div>
+                  <span className="text-xs font-extrabold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 px-3.5 py-1 rounded-full border border-emerald-300 dark:border-emerald-800">
+                    Business • Own a Franchise
+                  </span>
+                </div>
+
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
+                  Own a Metrogram Franchise
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                  Open a Diagnostic Booking Hub & Sample Collection Center in your city or locality with high margins and zero equipment risk.
+                </p>
+
+                <div className="space-y-3.5 mb-8 text-xs sm:text-sm">
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <TrendingUp className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        High Profit Margins (Up to 40%–50%):
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        Earn handsome referral and collection commissions on Pathology, CT Scans, MRI, and Ultrasound.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Zero Machine Investment:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        No expensive diagnostic machinery required. Tests processed at centralized NABL-accredited labs.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <Building className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Low Space & Rapid Payback (3–6 Months ROI):
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        Requires just 100 to 250 sq.ft commercial space. Fast breakeven supported by Metrogram cardholder footfall.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700">
+                    <Handshake className="h-4 w-4 text-purple-600 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-slate-900 dark:text-white font-bold block text-xs">
+                        Full Branding & Software Support:
+                      </strong>
+                      <span className="text-slate-600 dark:text-slate-300 text-xs">
+                        Signage, marketing materials, phlebo staff training, cold-chain logistics, and cloud ERP billing software provided.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-3">
+                <Button
+                  type="button"
+                  onClick={() => handleOpenPartnerModal("franchise")}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 rounded-xl shadow-md shadow-emerald-600/25 cursor-pointer text-xs"
+                >
+                  <Store className="h-4 w-4 mr-2" />
+                  Inquire for Franchise
+                </Button>
+                <a
+                  href="https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20am%20interested%20in%20buying/opening%20a%20Metrogram%20Diagnostic%20Franchise%20in%20Bihar."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <MessageSquare className="h-4 w-4 mr-1.5 text-emerald-600" />
+                  WhatsApp Franchise Desk
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 12. FAQ BLOCK */}
+      <section
+        id="faqs"
+        className="py-20 bg-slate-50 dark:bg-[#0F172A] border-b border-slate-200 dark:border-slate-800"
+      >
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20 max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold mb-2">
@@ -1534,7 +1769,7 @@ export const LandingPage: React.FC = () => {
             <div className="lg:col-span-5 space-y-6">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#97144D]/10 text-[#97144D] dark:bg-rose-950/60 dark:text-rose-300 text-xs font-bold border border-[#97144D]/20">
                 <PhoneCall className="h-3.5 w-3.5" />
-                <span>24/7 CARD & HOSPITAL HELPLINE</span>
+                <span>24/7 CARD & DIAGNOSTIC HELPLINE</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
@@ -1542,7 +1777,7 @@ export const LandingPage: React.FC = () => {
               </h2>
 
               <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Need immediate admission assistance at a private hospital in Bihar? Or have questions regarding adding your family members? Our team is available 24x7.
+                Have questions regarding your Metrogram Membership Card or booking a CT Scan, MRI, Ultrasound, or Pathology test? Our team is available 24x7.
               </p>
 
               <div className="space-y-3.5">
@@ -1555,7 +1790,9 @@ export const LandingPage: React.FC = () => {
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-500 font-semibold">24x7 Emergency & Hospital Admission Desk</div>
+                    <div className="text-xs text-slate-500 font-semibold">
+                      24x7 Diagnostic & Hospital Helpline
+                    </div>
                     <div className="text-base font-extrabold text-slate-900 dark:text-white">
                       +91 91234 56789 / 1800-METRO-CARD
                     </div>
@@ -1564,7 +1801,7 @@ export const LandingPage: React.FC = () => {
 
                 {/* WhatsApp Chat */}
                 <a
-                  href="https://wa.me/919123456789?text=Hello%20Metrogram,%20I%20need%20card%20assistance"
+                  href="https://wa.me/919123456789?text=Hello%20Metrogram,%20I%20want%20to%20apply%20for%20the%20100%20rupees%20membership%20card"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center gap-4 hover:border-emerald-500/40 bg-slate-50 dark:bg-slate-900 transition-colors block group"
@@ -1573,7 +1810,9 @@ export const LandingPage: React.FC = () => {
                     <MessageSquare className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs text-slate-500 font-semibold">Direct WhatsApp Card Concierge</div>
+                    <div className="text-xs text-slate-500 font-semibold">
+                      Direct WhatsApp Card Concierge
+                    </div>
                     <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-300">
                       +91 91234 56789 (Instant Support)
                     </div>
@@ -1586,7 +1825,9 @@ export const LandingPage: React.FC = () => {
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div className="text-xs">
-                    <div className="text-slate-500 font-semibold mb-1">State Command & Head Office</div>
+                    <div className="text-slate-500 font-semibold mb-1">
+                      State Command & Head Office
+                    </div>
                     <div className="font-bold text-slate-900 dark:text-white">
                       Metrogram Healthcare Private Limited
                     </div>
@@ -1601,10 +1842,10 @@ export const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right 7 Columns: Card Application & Consultation Form */}
+            {/* Right 7 Columns: Card Application Form */}
             <div className="lg:col-span-7 bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-6 sm:p-10 shadow-lg">
               <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">
-                Apply for Metrogram Health Card
+                Apply for Metrogram Health Card (₹100/yr)
               </h3>
               <p className="text-xs text-slate-500 mb-6">
                 Fill in your details for instant card activation. Your digital QR card will be sent to WhatsApp within 5 minutes.
@@ -1619,13 +1860,13 @@ export const LandingPage: React.FC = () => {
                     Application Received & Card Dispatched!
                   </h4>
                   <p className="text-xs text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                    Congratulations <strong>{formData.name}</strong>! Your <strong>{formData.plan}</strong> has been created. A digital card QR and partner hospital admission token has been sent to <strong>{formData.phone}</strong>.
+                    Congratulations <strong>{formData.name}</strong>! Your <strong>Metrogram Annual Membership Card (₹100/yr)</strong> has been created. A digital card QR and diagnostic token has been sent to <strong>{formData.phone}</strong>.
                   </p>
                   <Button
                     onClick={handleResetModal}
                     className="bg-[#97144D] text-white font-bold text-xs"
                   >
-                    Apply for Another Family Member
+                    Apply for Another Member
                   </Button>
                 </div>
               ) : (
@@ -1633,12 +1874,14 @@ export const LandingPage: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Full Name of Head of Family *
+                        Full Name of Applicant *
                       </label>
                       <Input
                         placeholder="e.g. Ramesh Chandra Verma"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, name: e.target.value })
+                        }
                         required
                         className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-11"
                       />
@@ -1646,13 +1889,15 @@ export const LandingPage: React.FC = () => {
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Mobile Phone Number *
+                        Mobile Phone Number (WhatsApp) *
                       </label>
                       <Input
                         placeholder="e.g. 9876543210"
                         type="tel"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, phone: e.target.value })
+                        }
                         required
                         className="bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-11"
                       />
@@ -1666,7 +1911,9 @@ export const LandingPage: React.FC = () => {
                       </label>
                       <select
                         value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, city: e.target.value })
+                        }
                         className="w-full h-11 px-3 text-sm rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                       >
                         <option value="Patna">Patna</option>
@@ -1676,27 +1923,25 @@ export const LandingPage: React.FC = () => {
                         <option value="Darbhanga">Darbhanga</option>
                         <option value="Begusarai">Begusarai</option>
                         <option value="Purnia">Purnia</option>
-                        <option value="Other District">Other District in Bihar</option>
+                        <option value="Other District">
+                          Other District in Bihar
+                        </option>
                       </select>
                     </div>
 
                     <div>
                       <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        Select Card Plan
+                        Selected Card Plan
                       </label>
                       <select
                         value={formData.plan}
-                        onChange={(e) => setFormData({ ...formData, plan: e.target.value })}
+                        onChange={(e) =>
+                          setFormData({ ...formData, plan: e.target.value })
+                        }
                         className="w-full h-11 px-3 text-sm rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                       >
-                        <option value="Metrogram Gold Family Shield (₹200/yr)">
-                          Metrogram Gold Family Shield (₹200/yr) — 4 Members
-                        </option>
-                        <option value="Metrogram Platinum Super Shield (₹300/yr)">
-                          Metrogram Platinum Super Shield (₹300/yr) — 6 Members
-                        </option>
-                        <option value="Metrogram Silver Card (₹100/yr)">
-                          Metrogram Silver Card (₹100/yr) — 1 Individual
+                        <option value="Metrogram Annual Membership Card (₹100/yr)">
+                          Metrogram Annual Membership Card (₹100/yr) — 1 Year Validity
                         </option>
                       </select>
                     </div>
@@ -1704,13 +1949,15 @@ export const LandingPage: React.FC = () => {
 
                   <div>
                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Family Members to Include / Specific Medical Concern (Optional)
+                      Required Diagnostic Test / Family Details (Optional)
                     </label>
                     <textarea
                       rows={3}
-                      placeholder="Mention names & ages of family members or if anyone currently needs surgery / hospitalization..."
+                      placeholder="e.g. Need Blood Specimen Test / CT Scan / MRI appointment or family member details..."
                       value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
                       className="w-full p-3 text-sm rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                     />
                   </div>
@@ -1726,14 +1973,14 @@ export const LandingPage: React.FC = () => {
                       ) : (
                         <span className="flex items-center justify-center gap-2">
                           <CreditCard className="h-4 w-4" />
-                          Confirm Application & Receive Digital Card
+                          Confirm & Receive Digital Card (₹100)
                         </span>
                       )}
                     </Button>
                   </div>
 
                   <div className="text-center text-[11px] text-slate-500 pt-1">
-                    🔒 100% Secure & Regulated. No health insurance medical test rejection.
+                    🔒 100% Secure & Regulated. Instant activation on WhatsApp.
                   </div>
                 </form>
               )}
@@ -1742,7 +1989,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 13. FOOTER (Axis Burgundy & Crisp Clean Contrast) */}
+      {/* 13. FOOTER */}
       <footer className="bg-[#1E2229] text-white pt-16 pb-12 border-t border-slate-800">
         <div className="w-full px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12 mb-12">
@@ -1756,100 +2003,190 @@ export const LandingPage: React.FC = () => {
                 />
               </Link>
               <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-                Metrogram Healthcare Private Limited is Bihar’s leading hospital bill coverage membership network. Empowering families with instant on-counter hospital bill subsidies at 120+ top private medical centers across Bihar.
+                Metrogram Healthcare Private Limited is Bihar’s premier diagnostic membership network. Providing instant on-counter discounts on Pathology, Radiology (CT Scan, MRI, Ultrasound), and Diagnostic Psychography across 120+ partner centers.
               </p>
               <div className="text-xs text-slate-400 space-y-1">
                 <div>CIN / Reg: U85100BR2021PTC051289</div>
-                <div>ISO 9001:2015 Certified Health Access Network</div>
+                <div>ISO 9001:2015 Certified Health Diagnostic Network</div>
               </div>
             </div>
 
-            {/* Col 3: Card Plans */}
+            {/* Col 3: Card Membership */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-                Card Plans
+                Card Membership
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li>
-                  <a href="#plans" className="hover:text-white transition-colors">
-                    Metrogram Gold Family Shield
+                  <a
+                    href="#plans"
+                    className="hover:text-white transition-colors"
+                  >
+                    Annual Card (₹100/yr)
                   </a>
                 </li>
                 <li>
-                  <a href="#plans" className="hover:text-white transition-colors">
-                    Metrogram Platinum Super Shield
+                  <a
+                    href="#how-it-works"
+                    className="hover:text-white transition-colors"
+                  >
+                    How It Works (3 Steps)
                   </a>
                 </li>
                 <li>
-                  <a href="#plans" className="hover:text-white transition-colors">
-                    Metrogram Silver Card (Individual)
+                  <a
+                    href="#hospitals"
+                    className="hover:text-white transition-colors"
+                  >
+                    120+ Empanelled Hubs
                   </a>
                 </li>
                 <li>
-                  <a href="#calculator" className="hover:text-white transition-colors">
-                    Hospital Savings Calculator
-                  </a>
-                </li>
-                <li>
-                  <a href="#hospitals" className="hover:text-white transition-colors">
-                    120+ Empanelled Hospitals
+                  <a
+                    href="#faqs"
+                    className="hover:text-white transition-colors"
+                  >
+                    Membership FAQs
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Col 4: Covered Surgeries */}
+            {/* Col 4: Core Services */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-                Covered Procedures
+                Diagnostic Services
               </h4>
               <ul className="space-y-2.5 text-xs text-slate-400">
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    Laparoscopic Surgeries
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    Metrogram Pathology
                   </a>
                 </li>
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    Normal & C-Section Maternity
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    Blood Specimen Collection
                   </a>
                 </li>
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    Total Knee Replacement
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    CT Scan Diagnostics
                   </a>
                 </li>
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    Kidney Stone Laser (PCNL)
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    MRI Diagnostic Imaging
                   </a>
                 </li>
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    Cardiac Stenting & ICU Stay
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    Ultrasound & Doppler
                   </a>
                 </li>
                 <li>
-                  <a href="#coverage" className="hover:text-white transition-colors">
-                    50% OFF NABL Lab Tests
+                  <a
+                    href="#services"
+                    className="hover:text-white transition-colors"
+                  >
+                    Diagnostic Psychography
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Col 5: 24/7 Helpline */}
+            {/* Col 5: Careers & Franchise Opportunities */}
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
-                Hospital Helpdesk
+                Careers & Franchise
+              </h4>
+              <ul className="space-y-2.5 text-xs text-slate-400">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenPartnerModal("phlebo")}
+                    className="hover:text-white transition-colors text-left flex items-center gap-1.5"
+                  >
+                    <span>Join as a Phlebotomist</span>
+                    <span className="text-[9px] px-1 py-0.2 rounded bg-rose-900/60 text-rose-300 font-bold">Hiring</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenPartnerModal("franchise")}
+                    className="hover:text-white transition-colors text-left flex items-center gap-1.5"
+                  >
+                    <span>Own a Metrogram Franchise</span>
+                    <span className="text-[9px] px-1 py-0.2 rounded bg-emerald-900/60 text-emerald-300 font-bold">High ROI</span>
+                  </button>
+                </li>
+                <li>
+                  <a
+                    href="#careers"
+                    className="hover:text-white transition-colors"
+                  >
+                    Phlebo Earnings & Kit
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#franchise"
+                    className="hover:text-white transition-colors"
+                  >
+                    Franchise Setup & Margins
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://wa.me/919123456789?text=Hi%20Metrogram,%20I%20want%20to%20know%20about%20Career%20and%20Franchise%20options."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-emerald-300 transition-colors flex items-center gap-1 text-emerald-400 font-semibold"
+                  >
+                    <MessageSquare className="h-3 w-3" />
+                    <span>WhatsApp Partner Desk</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Col 6: 24/7 Helpline */}
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">
+                Diagnostic Helpdesk
               </h4>
               <div className="space-y-3 text-xs text-slate-400">
                 <div className="p-3 rounded-lg bg-slate-800/80 border border-slate-700">
-                  <div className="text-rose-400 font-bold text-sm">+91 91234 56789</div>
-                  <div className="text-[10px] text-slate-400">24/7 Hospital Admission Desk</div>
+                  <div className="text-rose-400 font-bold text-sm">
+                    +91 91234 56789
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    24/7 Diagnostic & Partner Helpline
+                  </div>
                 </div>
                 <div>
-                  <div className="text-white font-semibold">Email Enquiries:</div>
-                  <a href="mailto:care@metrogram.in" className="hover:underline text-rose-300">
+                  <div className="text-white font-semibold">
+                    Email Enquiries:
+                  </div>
+                  <a
+                    href="mailto:care@metrogram.in"
+                    className="hover:underline text-rose-300"
+                  >
                     care@metrogram.in
                   </a>
                 </div>
@@ -1863,12 +2200,25 @@ export const LandingPage: React.FC = () => {
 
           <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <div>
-              &copy; {new Date().getFullYear()} Metrogram Healthcare Private Limited. All Rights Reserved.
+              &copy; {new Date().getFullYear()} Metrogram Healthcare Private
+              Limited. All Rights Reserved.
             </div>
             <div className="flex gap-6">
-              <span className="hover:text-slate-400 cursor-pointer">Privacy Policy</span>
-              <span className="hover:text-slate-400 cursor-pointer">Card Terms of Use</span>
-              <span className="hover:text-slate-400 cursor-pointer">Hospital Tariff Charter</span>
+              <span className="hover:text-slate-400 cursor-pointer">
+                Privacy Policy
+              </span>
+              <span className="hover:text-slate-400 cursor-pointer">
+                Card Terms of Use
+              </span>
+              <span className="hover:text-slate-400 cursor-pointer">
+                Diagnostic Tariff Charter
+              </span>
+              <span
+                onClick={() => handleOpenPartnerModal("franchise")}
+                className="hover:text-rose-400 cursor-pointer text-slate-400"
+              >
+                Franchise Partner Terms
+              </span>
             </div>
           </div>
         </div>
@@ -1885,7 +2235,7 @@ export const LandingPage: React.FC = () => {
         </a>
 
         <a
-          href="https://wa.me/919123456789?text=Hello%20Metrogram,%20I%20want%20to%20apply%20for%20the%20Metrogram%20Health%20Card"
+          href="https://wa.me/919123456789?text=Hello%20Metrogram,%20I%20want%20to%20apply%20for%20the%20100%20rupees%20Metrogram%20Health%20Card"
           target="_blank"
           rel="noopener noreferrer"
           className="flex-1 inline-flex items-center justify-center gap-1.5 h-10 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold text-xs border border-emerald-300 dark:border-emerald-700 active:scale-95 transition-transform"
@@ -1900,7 +2250,7 @@ export const LandingPage: React.FC = () => {
           className="flex-1 h-10 bg-[#97144D] hover:bg-[#820d3f] text-white font-bold text-xs rounded-lg shadow-md shadow-[#97144D]/30 active:scale-95 transition-transform cursor-pointer"
         >
           <CreditCard className="h-3.5 w-3.5 mr-1" />
-          <span>Apply Card</span>
+          <span>Get Card (₹100)</span>
         </Button>
       </div>
 
@@ -1917,13 +2267,7 @@ export const LandingPage: React.FC = () => {
               </DialogTitle>
             </div>
             <DialogDescription className="text-xs text-slate-500">
-              {selectedPlanForModal ? (
-                <span>
-                  Selected Plan: <strong className="text-[#97144D] dark:text-rose-400">{selectedPlanForModal.name}</strong> (₹{selectedPlanForModal.price}/yr — {selectedPlanForModal.membersCount})
-                </span>
-              ) : (
-                <span>Protect your family with up to 75% hospital bill coverage across Bihar.</span>
-              )}
+              Metrogram Annual Membership Card (₹100/year) — 1 Year (365 Days) Complete Validity.
             </DialogDescription>
           </DialogHeader>
 
@@ -1936,7 +2280,9 @@ export const LandingPage: React.FC = () => {
                 Card Application Activated!
               </h4>
               <p className="text-xs text-slate-600 dark:text-slate-300">
-                Your digital Metrogram Card QR code has been dispatched to <strong>{formData.phone}</strong> on WhatsApp. You can immediately show it at any partner hospital.
+                Your digital Metrogram Card QR code has been dispatched to{" "}
+                <strong>{formData.phone}</strong> on WhatsApp. You can
+                immediately show it at any partner diagnostic center.
               </p>
               <Button
                 onClick={handleResetModal}
@@ -1954,7 +2300,9 @@ export const LandingPage: React.FC = () => {
                 <Input
                   placeholder="e.g. Ramesh Chandra Verma"
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   required
                   className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-10"
                 />
@@ -1969,7 +2317,9 @@ export const LandingPage: React.FC = () => {
                     placeholder="e.g. 9876543210"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
                     required
                     className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-10"
                   />
@@ -1981,7 +2331,9 @@ export const LandingPage: React.FC = () => {
                   </label>
                   <select
                     value={formData.city}
-                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
                     className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                   >
                     <option value="Patna">Patna</option>
@@ -1998,34 +2350,32 @@ export const LandingPage: React.FC = () => {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Selected Card Tier
+                  Card Membership Plan
                 </label>
                 <select
                   value={formData.plan}
-                  onChange={(e) => setFormData({ ...formData, plan: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, plan: e.target.value })
+                  }
                   className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                 >
-                  <option value="Metrogram Gold Family Shield (₹200/yr)">
-                    Metrogram Gold Family Shield (₹200/yr) — 4 Members (Most Popular)
-                  </option>
-                  <option value="Metrogram Platinum Super Shield (₹300/yr)">
-                    Metrogram Platinum Super Shield (₹300/yr) — 6 Members (Max Coverage)
-                  </option>
-                  <option value="Metrogram Silver Card (₹100/yr)">
-                    Metrogram Silver Card (₹100/yr) — 1 Individual
+                  <option value="Metrogram Annual Membership Card (₹100/yr)">
+                    Metrogram Annual Membership Card (₹100/yr) — 1 Year Validity
                   </option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Delivery Address & Family Notes (Optional)
+                  Delivery Address & Diagnostic Notes (Optional)
                 </label>
                 <textarea
                   rows={2}
-                  placeholder="e.g. Near Boring Canal Road, Patna. Include spouse Sunita and 2 kids..."
+                  placeholder="e.g. Near Boring Canal Road, Patna. Diagnostic request details..."
                   value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, message: e.target.value })
+                  }
                   className="w-full p-2.5 text-xs rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
                 />
               </div>
@@ -2041,7 +2391,7 @@ export const LandingPage: React.FC = () => {
                   ) : (
                     <span className="flex items-center justify-center gap-2">
                       <CreditCard className="h-3.5 w-3.5" />
-                      Activate Card on WhatsApp
+                      Activate Card for ₹100 on WhatsApp
                     </span>
                   )}
                 </Button>
@@ -2049,6 +2399,316 @@ export const LandingPage: React.FC = () => {
 
               <div className="text-center text-[10px] text-slate-400">
                 Zero waiting period. Instant card coverage starts from the moment of activation.
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* 16. MODAL: CAREERS (PHLEBO) & FRANCHISE PARTNERSHIP DIALOG */}
+      <Dialog open={isPartnerModalOpen} onOpenChange={setIsPartnerModalOpen}>
+        <DialogContent className="sm:max-w-xl bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 p-6 max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            {/* Tab Selector in Modal Header */}
+            <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setPartnerModalType("phlebo");
+                  setPartnerFormData((p) => ({ ...p, roleType: "phlebo" }));
+                  setIsPartnerSuccess(false);
+                }}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  partnerModalType === "phlebo"
+                    ? "bg-[#97144D] text-white shadow-sm shadow-[#97144D]/30"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                <Syringe className="h-3.5 w-3.5" />
+                <span>Join as a Phlebo</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPartnerModalType("franchise");
+                  setPartnerFormData((p) => ({ ...p, roleType: "franchise" }));
+                  setIsPartnerSuccess(false);
+                }}
+                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                  partnerModalType === "franchise"
+                    ? "bg-emerald-600 text-white shadow-sm shadow-emerald-600/30"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                <Store className="h-3.5 w-3.5" />
+                <span>Own a Franchise</span>
+              </button>
+            </div>
+
+            <DialogTitle className="text-xl font-black text-slate-900 dark:text-white">
+              {partnerModalType === "phlebo"
+                ? "Join Metrogram as a Certified Phlebotomist"
+                : "Own a Metrogram Diagnostic Collection Franchise"}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              {partnerModalType === "phlebo"
+                ? "Earn high per-sample fees, get standard phlebotomy kits, flexible home visit shifts, and performance bonuses."
+                : "Start a high-margin diagnostic collection center with zero equipment cost and full NABL lab network support."}
+            </DialogDescription>
+          </DialogHeader>
+
+          {isPartnerSuccess ? (
+            <div className="py-6 text-center space-y-4">
+              <div className="h-16 w-16 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto">
+                <Check className="h-8 w-8 stroke-[3]" />
+              </div>
+              <h4 className="text-xl font-black text-slate-900 dark:text-white">
+                {partnerFormData.roleType === "phlebo"
+                  ? "Phlebotomist Application Submitted!"
+                  : "Franchise Partnership Request Received!"}
+              </h4>
+              <p className="text-xs text-slate-600 dark:text-slate-300 max-w-md mx-auto leading-relaxed">
+                Thank you <strong>{partnerFormData.name}</strong>! Our{" "}
+                {partnerFormData.roleType === "phlebo"
+                  ? "Phlebotomy Operations & Recruitment Team"
+                  : "State Franchise Expansion Manager"}{" "}
+                has received your details and will connect with you on{" "}
+                <strong>{partnerFormData.phone}</strong> via Call / WhatsApp.
+              </p>
+              <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 text-xs text-slate-500 text-center">
+                📍 Location: <strong>{partnerFormData.city}, Bihar</strong> | Status: <strong>Under Fast-Track Review</strong>
+              </div>
+              <Button
+                onClick={handleResetPartnerModal}
+                className="bg-[#97144D] text-white font-bold text-xs mt-2"
+              >
+                Close Window
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handlePartnerSubmit} className="space-y-3.5 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Your Full Name *
+                  </label>
+                  <Input
+                    placeholder="e.g. Anand Kumar"
+                    value={partnerFormData.name}
+                    onChange={(e) =>
+                      setPartnerFormData({ ...partnerFormData, name: e.target.value })
+                    }
+                    required
+                    className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-10"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Mobile Phone (WhatsApp) *
+                  </label>
+                  <Input
+                    placeholder="e.g. 9876543210"
+                    type="tel"
+                    value={partnerFormData.phone}
+                    onChange={(e) =>
+                      setPartnerFormData({ ...partnerFormData, phone: e.target.value })
+                    }
+                    required
+                    className="bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm h-10"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    City / District in Bihar *
+                  </label>
+                  <select
+                    value={partnerFormData.city}
+                    onChange={(e) =>
+                      setPartnerFormData({ ...partnerFormData, city: e.target.value })
+                    }
+                    className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
+                  >
+                    <option value="Patna">Patna</option>
+                    <option value="Muzaffarpur">Muzaffarpur</option>
+                    <option value="Gaya">Gaya</option>
+                    <option value="Bhagalpur">Bhagalpur</option>
+                    <option value="Darbhanga">Darbhanga</option>
+                    <option value="Begusarai">Begusarai</option>
+                    <option value="Purnia">Purnia</option>
+                    <option value="Ara / Bhojpur">Ara / Bhojpur</option>
+                    <option value="Samastipur">Samastipur</option>
+                    <option value="Other District">Other District in Bihar</option>
+                  </select>
+                </div>
+
+                {partnerModalType === "phlebo" ? (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Professional Qualification *
+                    </label>
+                    <select
+                      value={partnerFormData.qualification}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, qualification: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
+                    >
+                      <option value="DMLT / BMLT">DMLT / BMLT (Medical Lab Tech)</option>
+                      <option value="GNM / BSC Nursing">GNM / BSC Nursing</option>
+                      <option value="Certified Phlebotomist">Certified Phlebotomy Technician</option>
+                      <option value="Experienced Healthcare Professional">12th/Graduate with Phlebotomy Exp</option>
+                    </select>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Commercial Space Available *
+                    </label>
+                    <select
+                      value={partnerFormData.spaceAvailable}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, spaceAvailable: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                    >
+                      <option value="100 - 250 sq.ft (Ideal)">100 - 250 sq.ft (Ideal Collection Center)</option>
+                      <option value="250 - 500 sq.ft">250 - 500 sq.ft</option>
+                      <option value="500+ sq.ft">500+ sq.ft (Diagnostic Hub)</option>
+                      <option value="Planning to Rent Commercial Space">Planning to Rent Space</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              {partnerModalType === "phlebo" ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Blood Collection Experience
+                    </label>
+                    <select
+                      value={partnerFormData.experience}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, experience: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
+                    >
+                      <option value="Fresher (< 1 Year)">Fresher (&lt; 1 Year)</option>
+                      <option value="1 - 3 Years">1 - 3 Years Experience</option>
+                      <option value="3 - 5 Years">3 - 5 Years Experience</option>
+                      <option value="5+ Years">5+ Years Senior Phlebo</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Two-Wheeler (Bike / Scooter)
+                    </label>
+                    <select
+                      value={partnerFormData.hasBike}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, hasBike: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
+                    >
+                      <option value="Yes">Yes (Have Bike & Driving License)</option>
+                      <option value="No">No (Will Arrange Soon)</option>
+                    </select>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Current Profession / Background
+                    </label>
+                    <select
+                      value={partnerFormData.currentBusiness}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, currentBusiness: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                    >
+                      <option value="Pharmacy / Medical Store">Chemist / Pharmacy Owner</option>
+                      <option value="Doctor Clinic / Nursing Home">Doctor Clinic / Hospital</option>
+                      <option value="Pathology Technician / Lab">Pathology Lab Operator</option>
+                      <option value="New Entrepreneur">New Healthcare Entrepreneur</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Planned Investment Budget
+                    </label>
+                    <select
+                      value={partnerFormData.investmentBudget}
+                      onChange={(e) =>
+                        setPartnerFormData({ ...partnerFormData, investmentBudget: e.target.value })
+                      }
+                      className="w-full h-10 px-3 text-sm rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                    >
+                      <option value="₹50,000 - ₹1 Lakh">₹50,000 - ₹1 Lakh</option>
+                      <option value="₹1 Lakh - ₹3 Lakhs">₹1 Lakh - ₹3 Lakhs (Recommended)</option>
+                      <option value="₹3 Lakhs - ₹5 Lakhs">₹3 Lakhs - ₹5 Lakhs</option>
+                      <option value="₹5 Lakhs+">₹5 Lakhs+ (Master Territory)</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  {partnerModalType === "phlebo"
+                    ? "Previous Experience / Locality You Can Cover (Optional)"
+                    : "Proposed Shop Location / Business Vision (Optional)"}
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder={
+                    partnerModalType === "phlebo"
+                      ? "e.g. 2 years experience in home blood collection in Kankarbagh & Boring Road..."
+                      : "e.g. Shop located on Main Road near District Hospital. Looking to start in 30 days..."
+                  }
+                  value={partnerFormData.message}
+                  onChange={(e) =>
+                    setPartnerFormData({ ...partnerFormData, message: e.target.value })
+                  }
+                  className="w-full p-2.5 text-xs rounded-md bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-[#97144D]"
+                />
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  disabled={isPartnerSubmitting}
+                  className={`w-full h-11 text-white font-bold rounded-lg cursor-pointer text-xs shadow-md ${
+                    partnerModalType === "phlebo"
+                      ? "bg-[#97144D] hover:bg-[#820d3f] shadow-[#97144D]/25"
+                      : "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/25"
+                  }`}
+                >
+                  {isPartnerSubmitting ? (
+                    <span>Submitting Application...</span>
+                  ) : partnerModalType === "phlebo" ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Syringe className="h-3.5 w-3.5" />
+                      Submit Phlebotomist Application
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      <Store className="h-3.5 w-3.5" />
+                      Submit Franchise Partnership Inquiry
+                    </span>
+                  )}
+                </Button>
+              </div>
+
+              <div className="text-center text-[10px] text-slate-400">
+                🔒 Direct verification by Metrogram Headquarters. Fast-track callback within 24 business hours.
               </div>
             </form>
           )}
