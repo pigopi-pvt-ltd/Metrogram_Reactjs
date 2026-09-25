@@ -59,6 +59,10 @@ import {
   FileCheck,
 } from "lucide-react";
 import { toast } from "sonner";
+import { MostBookedCheckups } from "@/components/landing/MostBookedCheckups";
+import { FeaturedSpecialtyShowcase } from "@/components/landing/FeaturedSpecialtyShowcase";
+import { MetrogramExperienceScroll } from "@/components/landing/MetrogramExperienceScroll";
+import { MostBookedTestsCarousel } from "@/components/landing/MostBookedTestsCarousel";
 
 // ==========================================
 // 1. DATA MODELS & CONSTANTS
@@ -81,7 +85,7 @@ const HERO_SLIDES: HeroSlide[] = [
     badgeTitle: "Annual Membership • Just ₹100/Year",
     description:
       "Get complete 1-year access to exclusive discounts on Metrogram Pathology, Radiology (CT Scan, MRI, Ultrasound), and Diagnostic Psychography across Bihar.",
-    bgImage: "/hero-medical.jpg",
+    bgImage: "/hero/metrogram-card.jpg",
     alt: "Metrogram Annual Membership Card for ₹100",
   },
   {
@@ -90,8 +94,7 @@ const HERO_SLIDES: HeroSlide[] = [
     badgeTitle: "Metrogram Pathology",
     description:
       "Advanced clinical pathology with certified diagnostics, standardized blood specimen collection, temperature-controlled processing, and rapid lab reporting.",
-    bgImage:
-      "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1920&auto=format&fit=crop&q=85",
+    bgImage: "/hero/pathology-lab.jpg",
     alt: "Metrogram Pathology Laboratory Diagnostics",
   },
   {
@@ -100,8 +103,7 @@ const HERO_SLIDES: HeroSlide[] = [
     badgeTitle: "Radiology Diagnostics",
     description:
       "High-precision diagnostic imaging suites: High-speed multi-slice CT Scan, Magnetic Resonance Imaging (MRI), and high-resolution 3D/4D Ultrasound sonography.",
-    bgImage:
-      "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1920&auto=format&fit=crop&q=85",
+    bgImage: "/hero/radiology-mri.jpg",
     alt: "CT Scan MRI Ultrasound Radiology Diagnostics",
   },
   {
@@ -110,8 +112,7 @@ const HERO_SLIDES: HeroSlide[] = [
     badgeTitle: "Psychography Suite",
     description:
       "Systematic psychographic profiling, cognitive evaluations, behavioral diagnostics, and mental health screenings guided by clinical experts.",
-    bgImage:
-      "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?w=1920&auto=format&fit=crop&q=85",
+    bgImage: "/hero/psychography-suite.jpg",
     alt: "Specialized Diagnostic Psychography Assessments",
   },
 ];
@@ -808,7 +809,7 @@ export const LandingPage: React.FC = () => {
               onClick={() => setCurrentSlide(idx)}
               className={`transition-all duration-300 cursor-pointer ${
                 idx === currentSlide
-                  ? "w-7 sm:w-8 h-2.5 rounded-full bg-emerald-500 shadow-md"
+                  ? "w-7 sm:w-8 h-2.5 rounded-full bg-[#97144D] shadow-md shadow-[#97144D]/50"
                   : "w-2.5 h-2.5 rounded-full bg-white/60 hover:bg-white/90"
               }`}
               aria-label={`Slide ${idx + 1}${idx === currentSlide ? " (Active)" : ""}`}
@@ -1208,6 +1209,18 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* 7. MOST BOOKED TESTS CAROUSEL (IN THEME COLOR WITH METROGRAM SERVICES) */}
+      <MostBookedTestsCarousel />
+
+      {/* 7.1 MOST BOOKED HEALTH CHECKUPS (AI & TEMPERATURE CONTROLLED) */}
+      <MostBookedCheckups />
+
+      {/* 7.1 FEATURED SPECIALTY DIAGNOSTICS & CLINIC PARTNERSHIPS (FAST REVEAL & EXIT SHOWCASE) */}
+      <FeaturedSpecialtyShowcase />
+
+      {/* 7.2 THE METROGRAM EXPERIENCE (STICKY STACKING OVERWRITE SCROLL REVEAL & REVERSE) */}
+      <MetrogramExperienceScroll />
 
       {/* 8. 120+ EMPANELLED HOSPITALS & DIAGNOSTIC NETWORK ACROSS BIHAR */}
       <section
