@@ -818,7 +818,16 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 4. HOW METROGRAM CARD WORKS (3 Simple Steps - 4th step removed) */}
+      {/* 4. FEATURED SPECIALTY DIAGNOSTICS & CLINIC PARTNERSHIPS (FAST REVEAL & EXIT SHOWCASE) */}
+      <FeaturedSpecialtyShowcase />
+
+      {/* 5. THE METROGRAM EXPERIENCE — HEALTHCARE BUILT AROUND PRECISION */}
+      <MetrogramExperienceScroll />
+
+      {/* 6. MOST BOOKED HEALTH CHECKUPS (AI & TEMPERATURE CONTROLLED) */}
+      <MostBookedCheckups />
+
+      {/* 7. HOW METROGRAM CARD WORKS (3 Simple Steps - 4th step removed) */}
       <section
         id="how-it-works"
         className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
@@ -1210,19 +1219,10 @@ export const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* 7. MOST BOOKED TESTS CAROUSEL (IN THEME COLOR WITH METROGRAM SERVICES) */}
+      {/* 10. MOST BOOKED TESTS CAROUSEL (IN THEME COLOR WITH METROGRAM SERVICES) */}
       <MostBookedTestsCarousel />
 
-      {/* 7.1 MOST BOOKED HEALTH CHECKUPS (AI & TEMPERATURE CONTROLLED) */}
-      <MostBookedCheckups />
-
-      {/* 7.1 FEATURED SPECIALTY DIAGNOSTICS & CLINIC PARTNERSHIPS (FAST REVEAL & EXIT SHOWCASE) */}
-      <FeaturedSpecialtyShowcase />
-
-      {/* 7.2 THE METROGRAM EXPERIENCE (STICKY STACKING OVERWRITE SCROLL REVEAL & REVERSE) */}
-      <MetrogramExperienceScroll />
-
-      {/* 8. 120+ EMPANELLED HOSPITALS & DIAGNOSTIC NETWORK ACROSS BIHAR */}
+      {/* 11. 120+ EMPANELLED HOSPITALS & DIAGNOSTIC NETWORK ACROSS BIHAR */}
       <section
         id="hospitals"
         className="py-20 bg-white dark:bg-[#0B0F19] border-b border-slate-200 dark:border-slate-800"
